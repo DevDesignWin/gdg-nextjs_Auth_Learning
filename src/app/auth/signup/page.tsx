@@ -4,10 +4,19 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { 
+  createUserWithEmailAndPassword, 
+  updateProfile,
+  signInWithPopup,
+  GoogleAuthProvider 
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { useAuth } from '@/context/AuthContext';
 
 export default function SignupPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -17,21 +26,35 @@ export default function SignupPage() {
   const [errors, setErrors] = useState({
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    firebase: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  // Initialize Google Auth Provider
+  const googleProvider = new GoogleAuthProvider();
+
+  // Handle redirect in useEffect
+  useEffect(() => {
+    if (user || shouldRedirect) {
+      router.push('/onboarding');
+    }
+  }, [user, shouldRedirect, router]);
 
   const validateForm = () => {
     let valid = true;
     const newErrors = {
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      firebase: ''
     };
 
     // Email validation
-    if (!formData.email.endsWith('@gmail.com')) {
-      newErrors.email = 'Please enter a valid @gmail.com address';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
       valid = false;
     }
 
@@ -57,22 +80,88 @@ export default function SignupPage() {
       ...prev,
       [name]: value
     }));
+    // Clear errors when typing
+    if (errors[name as keyof typeof errors]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+    if (errors.firebase) {
+      setErrors(prev => ({ ...prev, firebase: '' }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
     
     setIsSubmitting(true);
-    // Simulate signup process
-    setTimeout(() => {
-      router.push('/learning');
-    }, 1000);
+    setErrors(prev => ({ ...prev, firebase: '' }));
+
+    try {
+      // Create user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      // Update user profile with display name
+      await updateProfile(userCredential.user, {
+        displayName: formData.fullName
+      });
+
+      // Trigger redirect through useEffect
+      setShouldRedirect(true);
+    } catch (err) {
+      handleAuthError(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    setErrors(prev => ({ ...prev, firebase: '' }));
+
+    try {
+      await signInWithPopup(auth, googleProvider);
+      setShouldRedirect(true);
+    } catch (err) {
+      handleAuthError(err);
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+  const handleAuthError = (err: unknown) => {
+    let errorMessage = 'Authentication failed. Please try again.';
+    if (err instanceof Error) {
+      switch (err.message) {
+        case 'Firebase: Error (auth/email-already-in-use).':
+          errorMessage = 'Email already in use.';
+          break;
+        case 'Firebase: Error (auth/invalid-email).':
+          errorMessage = 'Invalid email format.';
+          break;
+        case 'Firebase: Error (auth/weak-password).':
+          errorMessage = 'Password should be at least 6 characters.';
+          break;
+        case 'Firebase: Error (auth/operation-not-allowed).':
+          errorMessage = 'Email/password accounts are not enabled.';
+          break;
+        case 'Firebase: Error (auth/popup-closed-by-user).':
+          errorMessage = 'Popup was closed before completing sign in.';
+          break;
+        case 'Firebase: Error (auth/cancelled-popup-request).':
+          errorMessage = 'Only one popup request is allowed at a time.';
+          break;
+      }
+    }
+    setErrors(prev => ({ ...prev, firebase: errorMessage }));
   };
 
   const isFormValid = 
     formData.fullName && 
-    formData.email.endsWith('@gmail.com') && 
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && 
     formData.password.length >= 6 && 
     formData.password === formData.confirmPassword;
 
@@ -101,6 +190,12 @@ export default function SignupPage() {
           Create Account
         </h1>
         
+        {errors.firebase && (
+          <div className="mb-4 p-3 bg-red-500/20 text-red-400 text-sm rounded-lg">
+            {errors.firebase}
+          </div>
+        )}
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -127,7 +222,7 @@ export default function SignupPage() {
               value={formData.email}
               onChange={handleChange}
               className="w-full bg-gray-700/50 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="your@gmail.com"
+              placeholder="your@email.com"
               required
             />
             {errors.email && (
@@ -186,6 +281,41 @@ export default function SignupPage() {
             {isSubmitting ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-600" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-gray-800/50 text-gray-400">
+              Or continue with
+            </span>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={isGoogleLoading}
+            className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border border-gray-600 hover:bg-gray-700/50 transition ${
+              isGoogleLoading ? 'opacity-70' : ''
+            }`}
+          >
+            {isGoogleLoading ? (
+              <span className="text-gray-400">Signing in with Google...</span>
+            ) : (
+              <>
+                <Image 
+                  src="/images/google.webp" 
+                  alt="Google logo" 
+                  width={20} 
+                  height={20} 
+                />
+                <span className="text-gray-300">Sign up with Google</span>
+              </>
+            )}
+          </button>
+        </div>
 
         <div className="mt-6 text-center text-sm text-gray-400">
           Already have an account?{' '}

@@ -20,16 +20,40 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/60" />
       </div>
 
-      <div className="container mx-auto px-4 py-16 relative z-10">
+      <div className="container mx-auto px-4 py-3 relative z-7">
         {/* Navigation */}
-        <nav className="flex justify-between items-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
-          >
-            INVESTOPIA
-          </motion.div>
+        <nav className="flex justify-between items-center mb-7">
+        <motion.div 
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+  className="flex justify-between items-center mb-8"
+>
+  <div className="flex items-center gap-3">
+    <motion.div
+      initial={{ scale: 0, rotate: -180 }}
+      animate={{ scale: 1, rotate: 0 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+    >
+      {/* Replace with your actual logo image */}
+      <Image
+        src="/images/logo.png" // Update with your logo path
+        alt="Investopia Logo"
+        width={70}
+        height={70}
+        className="rounded-lg"
+      />
+    </motion.div>
+    
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+    >
+      INVESTOPIA
+    </motion.div>
+  </div>
+  </motion.div>
           
           <div className="flex gap-4">
             <motion.div
@@ -40,13 +64,13 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
             >
               <Link href="/auth/login">
-                <button className="px-6 py-2 bg-gray-700/50 hover:bg-gray-700/70 rounded-lg text-white transition">
+                <button className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white hover:opacity-90 transition">
                   Sign In
                 </button>
               </Link>
             </motion.div>
             
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -61,7 +85,7 @@ export default function Home() {
                   Get Started
                 </button>
               </Link>
-            </motion.div>
+            </motion.div> */}
           </div>
         </nav>
 
@@ -93,7 +117,7 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/learning">
+              <Link href="/auth/signup">
                 <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white hover:opacity-90 transition font-medium">
                   Start Learning
                 </button>

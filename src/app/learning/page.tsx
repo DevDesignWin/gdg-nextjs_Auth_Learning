@@ -1,11 +1,17 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { FiMessageSquare, FiUser, FiAward, FiPaperclip, FiSend, FiChevronRight, FiX, FiSearch } from 'react-icons/fi';
+import { FiActivity } from 'react-icons/fi';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiMessageSquare, FiUser, FiAward, FiChevronRight, FiX, FiSearch, FiLogOut, FiPlus } from 'react-icons/fi';
 import Image from 'next/image';
-import { useState, useRef, ChangeEvent } from 'react';
+
+import { useState, useRef, useEffect } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 import GeneralChat from '@/components/GeneralChat';
 import PersonalizedTutor from '@/components/PersonalizedTutor';
+
 
 // Interface definitions
 interface Participant {
@@ -14,6 +20,21 @@ interface Participant {
   points: number;
   progress: number;
   avatar: string;
+}
+
+interface LearningModule {
+  id: number;
+  title: string;
+  progress: number;
+  content: string;
+}
+
+interface UserAccount {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+  providerId: string;
 }
 
 interface LearningModule {
@@ -99,18 +120,97 @@ const recommendedContent: RecommendedContent = {
 };
 
 export default function LearningPage() {
-  const [activeChat, setActiveChat] = useState<string | null>(null);
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedModule, setSelectedModule] = useState<LearningModule | null>(null);
   const [selectedLink, setSelectedLink] = useState<QuickLink | null>(null);
   const [searchResults, setSearchResults] = useState<LearningModule[]>([]);
+  const router = useRouter();
+  const { user, logout, signInWithGoogle, linkWithGoogle } = useAuth();
+  const [activeChat, setActiveChat] = useState<string | null>(null);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedModule, setSelectedModule] = useState<LearningModule | null>(null);
+  const [userAccounts, setUserAccounts] = useState<UserAccount[]>([]);
+  const [authToken, setAuthToken] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Get Firebase auth token
+  useEffect(() => {
+    const getToken = async () => {
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          setAuthToken(token);
+        } catch (error) {
+          console.error('Error getting token:', error);
+          setAuthToken(null);
+        }
+      } else {
+        setAuthToken(null);
+      }
+    };
+
+    getToken();
+  }, [user]);
+
+ // Handle opening tutor with auth check
+ const handleOpenTutor = () => {
+  if (!user) {
+    alert('Please sign in to use the tutor');
+    return;
+  }
+  setActiveChat('tutor');
+};
+
+  // Fetch user accounts on mount
+  useEffect(() => {
+    if (user) {
+      const currentAccount: UserAccount = {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        providerId: user.providerData[0]?.providerId || 'firebase'
+      };
+      setUserAccounts([currentAccount]);
+    }
+  }, [user]);
+
+  // Click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowAccountMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleAddAccount = async () => {
+    try {
+      if (user) {
+        await linkWithGoogle();
+        const updatedAccount: UserAccount = {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          providerId: user.providerData[0]?.providerId || 'firebase'
+        };
+        setUserAccounts([updatedAccount]);
+      } else {
+        await signInWithGoogle();
+      }
+    } catch (error) {
+      console.error('Error handling account:', error);
+    }
+    setShowAccountMenu(false);
+  };
 
   // Handle search
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Simulate search results
       const results = [
         {
           id: 100,
@@ -131,14 +231,17 @@ export default function LearningPage() {
           content: `Typical errors traders make with ${searchQuery} and how to avoid them.`
         }
       ];
-      
       setSearchResults(results);
       setSearchQuery('');
     }
   };
 
-  // Handle module click
+  // Handle module click with auth check
   const handleModuleClick = (module: LearningModule) => {
+    if (!user) {
+      alert('Please sign in to use the tutor');
+      return;
+    }
     setSelectedModule(module);
     setActiveChat('tutor');
     setSearchResults([]);
@@ -150,6 +253,7 @@ export default function LearningPage() {
     setActiveChat(null);
     alert(`Opening: ${link.title}\n\n${link.content}`);
   };
+
 
   return (
     <div className="min-h-screen p-4 md:p-8 relative">
@@ -228,19 +332,133 @@ export default function LearningPage() {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex justify-between items-center mb-8"
+<div className="max-w-6xl mx-auto">
+  {/* Header */}
+  <motion.div
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    className="flex justify-between items-center mb-8"
+  >
+    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+      INVESTOPIA
+    </h1>
+    <div className="flex items-center gap-4">
+      <Link href="/trading-simulation" passHref>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all"
         >
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-            INVESTOPIA
-          </h1>
-          <div className="text-sm text-gray-400">Last Update: {new Date().toLocaleDateString()}</div>
-        </motion.div>
+          <FiActivity className="text-lg" />
+          <span>Trading Simulation</span>
+        </motion.button>
+      </Link>
+      
+      <div className="text-sm text-gray-400">Last Update: {new Date().toLocaleDateString()}</div>
+      
+      {/* User Avatar Dropdown */}
+      {user && (
+        <div className="relative" ref={dropdownRef}>
+          <button 
+            onClick={() => setShowAccountMenu(!showAccountMenu)}
+            className="flex items-center gap-2 group"
+          >
+            {user.photoURL ? (
+              <Image
+                src={user.photoURL}
+                alt={user.displayName || 'User avatar'}
+                width={40}
+                height={40}
+                className="rounded-full border-2 border-transparent group-hover:border-purple-500 transition-all"
+                priority
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center border-2 border-transparent group-hover:border-purple-500 transition-all">
+                <FiUser className="text-gray-300 text-lg" />
+              </div>
+            )}
+          </button>
+
+          <AnimatePresence>
+            {showAccountMenu && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute right-0 mt-2 w-56 bg-gray-800/90 backdrop-blur-md rounded-lg shadow-lg border border-gray-700 z-50 overflow-hidden"
+              >
+                <div className="p-2">
+                  {user.displayName && (
+                    <div 
+                      className="px-3 py-2 border-b border-gray-700 cursor-pointer hover:bg-gray-700/50 rounded-md"
+                      onClick={() => {
+                        router.push('/profile');
+                        setShowAccountMenu(false);
+                      }}
+                    >
+                      <p className="font-medium text-white truncate">{user.displayName}</p>
+                      <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                    </div>
+                  )}
+
+                  <div className="py-1">
+                    <p className="px-3 py-1 text-xs text-gray-400">Accounts</p>
+                    {userAccounts.map(account => (
+                      <div 
+                        key={account.uid}
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700/50 rounded-md cursor-pointer"
+                        onClick={() => {
+                          // Handle account switching here
+                          setShowAccountMenu(false);
+                        }}
+                      >
+                        {account.photoURL ? (
+                          <Image
+                            src={account.photoURL}
+                            alt={account.displayName || 'Account'}
+                            width={24}
+                            height={24}
+                            className="rounded-full"
+                          />
+                        ) : (
+                          <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center">
+                            <FiUser className="text-xs" />
+                          </div>
+                        )}
+                        <span className="truncate">{account.displayName || account.email}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleAddAccount}
+                    className="w-full flex items-center gap-2 px-3 py-2 mt-1 text-sm bg-gradient-to-r from-purple-600/50 to-blue-600/50 hover:from-purple-600/70 hover:to-blue-600/70 rounded-md text-white"
+                  >
+                    <FiPlus />
+                    Add Account
+                  </motion.button>
+
+                  <button
+                    onClick={() => {
+                      logout();
+                      setShowAccountMenu(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 mt-1 text-sm text-red-400 hover:bg-red-500/10 rounded-md"
+                  >
+                    <FiLogOut />
+                    Sign Out
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+    </div>
+  </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Sidebar */}
@@ -389,13 +607,30 @@ export default function LearningPage() {
 
             {/* Conditional Chat Interface or Leaderboard */}
             {activeChat === 'general' ? (
-              <GeneralChat onClose={() => setActiveChat(null)} />
-            ) : activeChat === 'tutor' ? (
-              <PersonalizedTutor 
-                onClose={() => setActiveChat(null)}
-                selectedModule={selectedModule}
-              />
-            ) : (
+        <GeneralChat onClose={() => setActiveChat(null)} />
+      ) : activeChat === 'tutor' ? (
+        authToken ? (
+          <PersonalizedTutor 
+            onClose={() => setActiveChat(null)} 
+            selectedModule={selectedModule} 
+            authToken={authToken} 
+          />
+        ) :
+
+            (
+              <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-gray-700 text-center">
+                <p className="text-red-400">Authentication required. Please sign in to use the tutor.</p>
+                <button
+                  onClick={() => signInWithGoogle()}
+                  className="mt-4 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+                >
+                  Sign In
+                </button>
+              </div>
+            )
+          )
+        
+            : (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -475,6 +710,7 @@ export default function LearningPage() {
                 </div>
               </motion.div>
             )}
+            
           </motion.div>
         </div>
       </div>
