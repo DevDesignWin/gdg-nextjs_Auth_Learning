@@ -32,18 +32,18 @@ type Question = SliderQuestion | SelectQuestion;
 
 // Stock and crypto data with IDs and logos
 const investmentOptions = [
-  { id: 'stock-aapl', name: 'Apple (AAPL)', logo: '/logos/aapl.png' },
-  { id: 'stock-msft', name: 'Microsoft (MSFT)', logo: '/logos/msft.png' },
-  { id: 'stock-googl', name: 'Alphabet (GOOGL)', logo: '/logos/googl.png' },
-  { id: 'stock-amzn', name: 'Amazon (AMZN)', logo: '/logos/amzn.png' },
-  { id: 'stock-tsla', name: 'Tesla (TSLA)', logo: '/logos/tsla.png' },
-  { id: 'stock-nflx', name: 'Netflix (NFLX)', logo: '/logos/nflx.png' },
-  { id: 'crypto-btc', name: 'Bitcoin (BTC)', logo: '/logos/btc.png' },
-  { id: 'crypto-eth', name: 'Ethereum (ETH)', logo: '/logos/eth.png' },
-  { id: 'crypto-sol', name: 'Solana (SOL)', logo: '/logos/sol.png' },
-  { id: 'crypto-bnb', name: 'BNB (BNB)', logo: '/logos/bnb.png' },
-  { id: 'crypto-xrp', name: 'XRP (XRP)', logo: '/logos/xrp.png' },
-  { id: 'crypto-doge', name: 'Dogecoin (DOGE)', logo: '/logos/doge.png' },
+  { id: 'stock-aapl', name: 'Apple (AAPL)', logo: '/images/aapl.png' },
+  { id: 'stock-msft', name: 'Microsoft (MSFT)', logo: '/images/msft.webp' },
+  { id: 'stock-googl', name: 'Alphabet (GOOGL)', logo: '/images/google.webp' },
+  { id: 'stock-amzn', name: 'Amazon (AMZN)', logo: '/images/amzn.png' },
+  { id: 'stock-tsla', name: 'Tesla (TSLA)', logo: '/images/tsla.png' },
+  { id: 'stock-nflx', name: 'Netflix (NFLX)', logo: '/images/nflx.png' },
+  { id: 'crypto-btc', name: 'Bitcoin (BTC)', logo: '/images/btc.png' },
+  { id: 'crypto-eth', name: 'Ethereum (ETH)', logo: '/images/eth.png' },
+  { id: 'crypto-sol', name: 'Solana (SOL)', logo: '/images/sol.png' },
+  { id: 'crypto-bnb', name: 'BNB (BNB)', logo: '/images/bnb.png' },
+  { id: 'crypto-xrp', name: 'XRP (XRP)', logo: '/images/xrp.png' },
+  { id: 'crypto-doge', name: 'Dogecoin (DOGE)', logo: '/images/doge.png' },
 ];
 
 const OnboardingPage = () => {
