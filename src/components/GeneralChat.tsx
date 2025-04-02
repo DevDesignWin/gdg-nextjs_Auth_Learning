@@ -45,13 +45,14 @@ interface UserProfile {
   portfolio: string[];
 }
 
-interface PersonalizedTutorProps {
+
+interface GeneralChatProps {
   onClose: () => void;
   selectedModule: LearningModule | null;
-  authToken: string;
+  authToken: string | null;
 }
 
-export default function PersonalizedTutor({ onClose, selectedModule, authToken }: PersonalizedTutorProps) {
+export default function PersonalizedTutor({ onClose, selectedModule, authToken }: GeneralChatProps) {
   const [messages, setMessages] = useState<Message[]>([
     { 
       sender: 'assistant', 
@@ -217,7 +218,7 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
           ...prev,
           {
             sender: 'assistant',
-            content: `Evaluation: ${data.evaluation}\n\nScore: +${data.currentScore - currentScore} points\n\nNext question: ${data.nextQuestion || 'Quiz completed!'}`
+            content: `Evaluation: ${data.evaluation}\n\n\nNext question: ${data.nextQuestion || 'Quiz completed!'}`
           }
         ]);
         
@@ -431,12 +432,12 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
           <h2 className="text-xl font-semibold">
             {selectedModule ? `Tutor: ${selectedModule.title}` : 'General Chat'}
           </h2>
-          <div className="text-sm text-gray-400">
+          {/* <div className="text-sm text-gray-400">
             <span className="text-yellow-400 font-medium">Your Current Score : {currentScore} pts</span>
             {quizState.isQuizActive && (
               <span className="ml-2 text-blue-400">(Quiz: {quizState.quizLevel})</span>
             )}
-          </div>
+          </div> */}
         </div>
         <div className="flex gap-2 items-center">
           {quizState.isQuizActive ? (
@@ -449,13 +450,13 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
             </button>
           ) : (
             <div className="relative">
-              <button
+              {/* <button
                 onClick={() => setShowQuizLevelSelector(!showQuizLevelSelector)}
                 className="px-3 py-1 text-xs bg-blue-500/20 text-blue-400 rounded-full hover:bg-blue-500/30 transition"
                 disabled={isLoading}
               >
                 Start Quiz
-              </button>
+              </button> */}
               {showQuizLevelSelector && (
                 <div className="absolute right-0 mt-1 w-40 bg-gray-700 rounded-lg shadow-lg z-10">
                   <button
