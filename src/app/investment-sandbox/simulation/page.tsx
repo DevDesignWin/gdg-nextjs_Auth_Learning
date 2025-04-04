@@ -16,7 +16,9 @@ const fetchStockData = async (stock) => {
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`)
     }
-    return await response.json()
+    const data = await response.json();
+    console.log(data)
+    return data;
   } catch (error) {
     console.error("Error fetching stock data:", error)
     throw error

@@ -1,6 +1,6 @@
 'use client';
 
-import { FiActivity } from 'react-icons/fi';
+import { FiActivity , FiBook, FiBookOpen } from 'react-icons/fi';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMessageSquare, FiUser, FiAward, FiChevronRight, FiX, FiSearch, FiLogOut, FiPlus } from 'react-icons/fi';
@@ -344,7 +344,19 @@ export default function LearningPage() {
       INVESTOPIA
     </h1>
     <div className="flex items-center gap-4">
-      <Link href="/trading-simulation" passHref>
+      
+    <Link href="/courses" passHref>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all"
+        >
+          <FiBookOpen className="text-lg" />
+          <span>Go To Courses</span>
+        </motion.button>
+      </Link>
+
+      <Link href="/investment-sandbox" passHref>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -607,8 +619,8 @@ export default function LearningPage() {
 
             {/* Conditional Chat Interface or Leaderboard */}
             {activeChat === 'general' ? (
-        <GeneralChat onClose={() => setActiveChat(null)} />
-      ) : activeChat === 'tutor' ? (
+        <GeneralChat onClose={() => setActiveChat(null)} selectedModule={selectedModule} authToken={authToken} />
+      ) :  activeChat === 'tutor' ? (
         authToken ? (
           <PersonalizedTutor 
             onClose={() => setActiveChat(null)} 
