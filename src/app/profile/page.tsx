@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { FiEdit, FiSave, FiX, FiUser, FiDollarSign, FiBriefcase, FiAward, FiPieChart, FiTrendingUp, FiBarChart2, FiCalendar, FiHome, FiDatabase, FiChevronDown, FiBookOpen } from 'react-icons/fi';
+import { FiEdit, FiSave, FiX, FiUser, FiDollarSign,  FiAward, FiPieChart,FiHome, FiChevronDown, FiBookOpen } from 'react-icons/fi';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useAuth } from '@/context/AuthContext';
@@ -431,7 +431,7 @@ const ProfilePage = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">Experience Points</h3>
-                  <p className="text-white/80">You've earned {experiencePoints} points so far!</p>
+                  <p className="text-white/80">You&apos;ve earned {experiencePoints} points so far!</p>
                 </div>
               </div>
               <motion.button

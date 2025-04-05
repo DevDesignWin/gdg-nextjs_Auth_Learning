@@ -11,16 +11,16 @@ export default function SandboxComponent() {
 
   // BSE/NSE stock options
   const stockOptions = [
-    { symbol: "DMART", name: "Avenue Supermarts Ltd. (DMart)" },  // Retail giant, strong growth
-    { symbol: "PIDILITIND", name: "Pidilite Industries Ltd." },  // Adhesives & chemicals (Fevicol)
-    { symbol: "BERGEPAINT", name: "Berger Paints India Ltd." },  // Paints sector alternative
-    { symbol: "M&M", name: "Mahindra & Mahindra Ltd." },  // Automotive & farm equipment leader
-    { symbol: "LT", name: "Larsen & Toubro Ltd." },  // Infrastructure & construction leader
-    { symbol: "DIVISLAB", name: "Divi's Laboratories Ltd." },  // Strong pharma company
-    { symbol: "TITAN", name: "Titan Company Ltd." },  // Watches, jewelry (Tanishq), eyewear
-    { symbol: "BAJAJHLDNG", name: "Bajaj Holdings & Investment Ltd." },  // Investment powerhouse
-    { symbol: "CONCOR", name: "Container Corporation of India Ltd." },  // Logistics & transport
-    { symbol: "COALINDIA", name: "Coal India Ltd." },  // Energy & mining leader
+    { symbol: "RELIANCE", name: "Reliance Industries Ltd." },
+    { symbol: "TCS", name: "Tata Consultancy Services Ltd." },
+    { symbol: "HDFCBANK", name: "HDFC Bank Ltd." },
+    { symbol: "INFY", name: "Infosys Ltd." },
+    { symbol: "ICICIBANK", name: "ICICI Bank Ltd." },
+    { symbol: "SBIN", name: "State Bank of India" },
+    { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd." },
+    { symbol: "BHARTIARTL", name: "Bharti Airtel Ltd." },
+    { symbol: "ITC", name: "ITC Ltd." },
+    { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank Ltd." },
   ];
   
 

@@ -4,7 +4,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
-import { NavBar } from '@/components/navbar';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -35,8 +34,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {/* <NavBar /> Added navigation bar */}
-            <main className="min-h-screen pt-3"> {/* Added padding for navbar */}
+     
+            <main className="min-h-screen pt-3"> 
               {children}
             </main>
             <Toaster />

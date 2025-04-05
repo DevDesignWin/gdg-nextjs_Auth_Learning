@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect, JSX } from 'react';
+import { useState, JSX } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { FiArrowRight, FiArrowLeft, FiCheck, FiDollarSign, FiBriefcase, FiAward, FiPieChart, FiTrendingUp, FiBarChart2, FiCalendar, FiHome, FiDatabase, FiUser } from 'react-icons/fi';
 import Image from 'next/image';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '@/context/AuthContext';
-import { User } from 'firebase/auth';
 
 type QuestionType = 'slider' | 'single-select' | 'multi-select';
 

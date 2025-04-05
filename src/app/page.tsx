@@ -4,7 +4,6 @@ import { motion, useAnimation, useInView } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import FinancialLiteracyReport from './FinancialLiteracyReport';
 
 export default function Home() {
   // Animation controls for scroll-triggered animations
@@ -187,11 +186,7 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/auth/signup">
-                <button className="px-8 py-3 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800/50 transition font-medium">
-                  Join Free
-                </button>
-              </Link>
+              
             </motion.div>
           </motion.div>
         </section>
@@ -209,10 +204,10 @@ export default function Home() {
             className="max-w-4xl mx-auto text-center"
           >
             <h2 className="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-              Why Investopia is Essential for Traders
+              Why Investopia is Essential for Traders ?
             </h2>
             <p className="text-xl text-gray-300 mb-12">
-              90% of traders fail within their first year. We're here to change that.
+              90% of traders fail within their first year. We&apos;re here to change that.
             </p>
             
             <div className="grid md:grid-cols-3 gap-8">
@@ -274,7 +269,7 @@ export default function Home() {
       {/* Header Section */}
       <header className="mb-8 text-center border-b border-blue-700 pb-6">
         <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-2">
-          India's Financial Literacy Landscape 2024
+          India&apos;s Financial Literacy Landscape 2024
         </h1>
         <p className="text-blue-300">Bridging the Gap Between Literacy and Financial Empowerment</p>
       </header>
@@ -573,7 +568,7 @@ export default function Home() {
             <div className="space-y-4">
               <div className="bg-black/20 p-4 rounded-lg backdrop-blur-sm border-l-4 border-blue-500">
                 <p className="font-bold text-white mb-1">Vision 2047 Alignment</p>
-                <p>Supports India's development goals by creating <span className="text-blue-300 font-bold">financially empowered citizens</span></p>
+                <p>Supports India&apos;s development goals by creating <span className="text-blue-300 font-bold">financially empowered citizens</span></p>
               </div>
               <div className="bg-black/20 p-4 rounded-lg backdrop-blur-sm border-l-4 border-yellow-500">
                 <p className="font-bold text-white mb-1">Wealth Redistribution</p>
@@ -711,7 +706,7 @@ export default function Home() {
           
           <div className="grid md:grid-cols-2 gap-4 mb-6">
             <div className="bg-gradient-to-r from-blue-900/50 to-blue-900/0 p-4 rounded-lg border-l-4 border-blue-500">
-              <p className="font-bold">India's Economic Transformation</p>
+              <p className="font-bold">India&apos;s Economic Transformation</p>
               <p className="text-sm">Supporting the 2047 developed nation vision</p>
             </div>
             <div className="bg-gradient-to-r from-purple-900/50 to-purple-900/0 p-4 rounded-lg border-l-4 border-purple-500">

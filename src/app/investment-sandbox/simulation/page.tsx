@@ -40,7 +40,6 @@ export default function InvestmentSimulator() {
   const searchParams = useSearchParams()
   const stockSymbol = searchParams.get("stock") || "INFY"
 
-  const [rawStockData, setRawStockData] = useState([])
   const [stockData, setStockData] = useState([])
   const [monthlyGroups, setMonthlyGroups] = useState({})
   const [visibleDataIndex, setVisibleDataIndex] = useState(1) // Start with first day visible
@@ -98,7 +97,7 @@ export default function InvestmentSimulator() {
           }))
           .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
 
-        setRawStockData(processedData)
+
         setStockData(processedData)
         setNewsArticles(news)
 
@@ -318,7 +317,7 @@ export default function InvestmentSimulator() {
   }
 
   // Custom tooltip for chart
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload
       return (
@@ -336,14 +335,10 @@ export default function InvestmentSimulator() {
     return null
   }
 
-  // Filter transactions for the current day
-  const currentTransactions = transactions.filter((t) => t.dayIndex === visibleDataIndex)
 
   // Get all transactions up to the current day
   const allTransactionsToDate = transactions.filter((t) => t.dayIndex <= visibleDataIndex)
 
-  // Get current month from visible data
-  const currentMonth = currentDayData ? currentDayData.monthKey : null
 
   // Loading state
   if (loading) {

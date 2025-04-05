@@ -12,7 +12,6 @@ export default function UserMenu() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -26,7 +25,6 @@ export default function UserMenu() {
   }, []);
 
   const handleAddAccount = async () => {
-    setError(null);
     try {
       if (user) {
         await linkWithGoogle();
@@ -34,7 +32,6 @@ export default function UserMenu() {
         await signInWithGoogle();
       }
     } catch (error) {
-      setError('Failed to link Google account. Please try again.');
       console.error('Error handling account:', error);
     } finally {
       setIsOpen(false);

@@ -5,8 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, signInWithRedirect ,signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
@@ -68,10 +68,10 @@ export default function LoginPage() {
       });
   
       // Race between auth and timeout
-      const result = await Promise.race([
-        signInWithPopup(auth, googleProvider),
-        timeoutPromise
-      ]);
+      // const result = await Promise.race([
+      //   signInWithPopup(auth, googleProvider),
+      //   timeoutPromise
+      // ]);
       setShouldRedirect(true);
     } catch (err) {
       if (err instanceof Error && err.message === 'Authentication timeout') {
@@ -245,7 +245,7 @@ export default function LoginPage() {
         </div>
 
         <div className="mt-6 text-center text-sm text-gray-400">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link 
             href="/auth/signup" 
             className="text-purple-400 hover:underline hover:text-purple-300 transition"
