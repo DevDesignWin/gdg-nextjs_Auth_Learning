@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import SandboxComponent from "./sandbox"
 import { useState, useEffect, useRef } from "react"
 import { useSearchParams } from "next/navigation"
@@ -400,6 +401,9 @@ export default function InvestmentSimulator() {
             Investment Simulator
           </h1>
           <div className="flex items-center space-x-4 mt-2 md:mt-0">
+            <Link href="/learning"><div className="bg-green-600 bg-opacity-50 rounded-lg px-4 py-2">
+              <span className="font-medium">Learning Corner</span>
+            </div></Link>
             <div className="bg-indigo-900 bg-opacity-50 rounded-lg px-4 py-2">
               <span className="font-medium">Stock: </span>
               <span className="font-bold">{stockSymbol}</span>
