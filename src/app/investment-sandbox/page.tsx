@@ -86,7 +86,7 @@ export default function Sandbox() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 text-center"
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 text-center m-3"
       >
         <h2 className="text-xl font-medium mb-2 dark:text-white">
           Select a BSE/NSE stock to begin
