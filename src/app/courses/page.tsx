@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronDown, FiChevronUp, FiPlay, FiBookOpen, FiCheckCircle, FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import Link from 'next/link';
 
 interface Lecture {
   id: string;
@@ -400,6 +401,16 @@ const CoursePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 p-4 md:p-8">
+        <Link href="/learning" passHref>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 px-4 py-2 mb-7 bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all"
+        >
+          <FiArrowLeft className="text-lg" />
+          <span>Back</span>
+        </motion.button>
+      </Link>
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

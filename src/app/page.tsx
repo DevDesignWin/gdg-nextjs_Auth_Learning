@@ -4,6 +4,7 @@ import { motion, useAnimation, useInView } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import FinancialLiteracyReport from './FinancialLiteracyReport';
 
 export default function Home() {
   // Animation controls for scroll-triggered animations
@@ -16,7 +17,7 @@ export default function Home() {
     {
       name: "Debjeet Singha",
       role: "Backend Developer",
-      image: "/images/debjeet.jpg",
+      image: "/images/debjeet_image.jpg",
      
     },
     {
@@ -58,7 +59,7 @@ export default function Home() {
     { name: "Features", href: "#features" },
     { name: "Stats", href: "#stats" },
     { name: "Demo", href: "#demo" },
-    { name: "Pricing", href: "#pricing" },
+    // { name: "Pricing", href: "#pricing" },
     { name: "Team", href: "#team" }
   ];
 
@@ -269,8 +270,525 @@ export default function Home() {
                 whileHover={{ scale: 1.02 }}
                 className="bg-gray-800/50 p-6 rounded-xl backdrop-blur-sm border border-gray-700"
               >
-                <h3 className="text-xl font-semibold mb-4 text-white">Financial literacy is crucial for India's development, with studies showing over 75% of Indian adults lacking adequate understanding of basic financial concepts. This comprehensive course is designed to bridge the knowledge gap and empower Indians from all backgrounds to take control of their financial future. The structure progresses from foundational concepts to advanced investment strategies, making it accessible for beginners while providing depth for those seeking to expand their financial knowledge.</h3>
-                
+              <div className="financial-literacy-report bg-gray-900 text-gray-100 p-6 rounded-xl max-w-5xl mx-auto font-sans shadow-2xl">
+      {/* Header Section */}
+      <header className="mb-8 text-center border-b border-blue-700 pb-6">
+        <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-2">
+          India's Financial Literacy Landscape 2024
+        </h1>
+        <p className="text-blue-300">Bridging the Gap Between Literacy and Financial Empowerment</p>
+      </header>
+
+      {/* Literacy Gap Section */}
+      <section className="mb-10 bg-gray-800 p-6 rounded-xl shadow-inner">
+        <div className="flex items-center mb-4">
+          <div className="bg-blue-600 w-1 h-8 mr-3 rounded-full"></div>
+          <h2 className="text-2xl font-bold text-white">Literacy Gap Statistics</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="flex items-start">
+              <span className="text-yellow-400 text-2xl mr-2">•</span>
+              <p>General literacy <span className="font-bold text-blue-300">77%</span> vs financial literacy <span className="font-bold text-red-300">23-35%</span> shows <span className="underline">critical education gap</span></p>
+            </div>
+            
+            <div className="bg-gray-700 p-4 rounded-lg border-l-4 border-green-500">
+              <h3 className="font-bold text-green-300 mb-2">Financial Literacy Spectrum</h3>
+              <ul className="space-y-2">
+                <li className="flex justify-between"><span>Advanced Skills:</span> <span className="font-bold">4.2%</span></li>
+                <li className="flex justify-between"><span>Elementary Knowledge:</span> <span className="font-bold">42.8%</span></li>
+                <li className="flex justify-between"><span>Moderate Literacy:</span> <span className="font-bold">20.8%</span></li>
+                <li className="flex justify-between text-red-400"><span>Completely Illiterate:</span> <span className="font-bold">32.2%</span></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="flex flex-col justify-between">
+            <div className="bg-gradient-to-br from-purple-900 to-blue-900 p-4 rounded-xl">
+              <p className="text-sm text-purple-200 mb-1">Financial Inclusion Index</p>
+              <p className="text-4xl font-bold text-center text-white">15%</p>
+              <p className="text-xs text-center text-purple-300 mt-1">(NCFE National Survey)</p>
+            </div>
+            
+            <div className="mt-auto pt-4">
+              <p className="text-sm text-gray-400">*Contrasts with 80%+ inclusion in developed economies</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* State-wise Disparities Section */}
+      <section className="mb-10 bg-gray-800 p-6 rounded-xl shadow-inner">
+        <div className="flex items-center mb-4">
+          <div className="bg-green-600 w-1 h-8 mr-3 rounded-full"></div>
+          <h2 className="text-2xl font-bold text-white">State-wise Financial Literacy Disparities</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {/* Top Performers */}
+          <div className="bg-gray-700 p-4 rounded-xl border-t-4 border-blue-500">
+            <h3 className="font-bold text-blue-300 flex items-center mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M12 8a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd" />
+              </svg>
+              Top Performing States
+            </h3>
+            <ul className="space-y-2">
+              <li className="flex justify-between items-center py-2 border-b border-gray-600">
+                <span>Goa</span>
+                <span className="bg-blue-900 text-blue-100 px-3 py-1 rounded-full text-sm">50%</span>
+              </li>
+              <li className="flex justify-between items-center py-2 border-b border-gray-600">
+                <span>Chandigarh</span>
+                <span className="bg-blue-900 text-blue-100 px-3 py-1 rounded-full text-sm">&gt;50%</span>
+              </li>
+              <li className="flex justify-between items-center py-2">
+                <span>Delhi</span>
+                <span className="bg-blue-900 text-blue-100 px-3 py-1 rounded-full text-sm">&gt;50%</span>
+              </li>
+            </ul>
+          </div>
+          
+          {/* Lagging States */}
+          <div className="bg-gray-700 p-4 rounded-xl border-t-4 border-red-500">
+            <h3 className="font-bold text-red-300 flex items-center mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M12 8a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd" />
+              </svg>
+              Lagging States
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              <span className="bg-red-900/50 text-red-100 px-3 py-1 rounded-full text-sm text-center">Assam</span>
+              <span className="bg-red-900/50 text-red-100 px-3 py-1 rounded-full text-sm text-center">Bihar</span>
+              <span className="bg-red-900/50 text-red-100 px-3 py-1 rounded-full text-sm text-center">Manipur</span>
+              <span className="bg-red-900/50 text-red-100 px-3 py-1 rounded-full text-sm text-center">Nagaland</span>
+              <span className="bg-red-900/50 text-red-100 px-3 py-1 rounded-full text-sm text-center col-span-2">Uttar Pradesh</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-gray-700 p-4 rounded-lg">
+            <h4 className="font-bold text-yellow-300 mb-2">The Kerala Paradox</h4>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-400">General Literacy</p>
+                <p className="text-2xl font-bold text-green-400">84%</p>
+              </div>
+              <div className="text-4xl mx-4 text-gray-500">→</div>
+              <div>
+                <p className="text-sm text-gray-400">Financial Literacy</p>
+                <p className="text-2xl font-bold text-red-400">36%</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-gray-700 p-4 rounded-lg">
+            <h4 className="font-bold text-purple-300 mb-2">Regional Leader</h4>
+            <p className="text-sm">North-East zone achieves <span className="font-bold text-white">20% financial inclusion</span> - highest among all regions</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Financial Behavior Section */}
+      <section className="mb-10 bg-gray-800 p-6 rounded-xl shadow-inner">
+        <div className="flex items-center mb-6">
+          <div className="bg-purple-600 w-1 h-8 mr-3 rounded-full"></div>
+          <h2 className="text-2xl font-bold text-white">Financial Behavior & Investment Patterns</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Savings Distribution */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-blue-300 border-b border-blue-700 pb-2">Savings Distribution</h3>
+            <div className="relative h-48 mb-4">
+              {/* Pie Chart Visualization */}
+              <div 
+                className="absolute inset-0 rounded-full border-8 border-transparent" 
+                style={{
+                  background: 'conic-gradient(#f59e0b 22%, #ef4444 44%, #3b82f6 34%)'
+                }}
+              >
+              </div>
+              <div className="absolute inset-8 rounded-full bg-gray-800"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                  <p className="text-xs text-gray-400">Household Savings</p>
+                  <p className="text-xl font-bold">100%</p>
+                </div>
+              </div>
+            </div>
+            
+            <ul className="space-y-3">
+              <li className="flex items-center">
+                <span className="w-4 h-4 bg-red-500 rounded-full mr-2"></span>
+                <span className="flex-1">Real Estate</span>
+                <span className="font-bold">44%</span>
+              </li>
+              <li className="flex items-center">
+                <span className="w-4 h-4 bg-yellow-500 rounded-full mr-2"></span>
+                <span className="flex-1">Gold</span>
+                <span className="font-bold">22%</span>
+              </li>
+              <li className="flex items-center">
+                <span className="w-4 h-4 bg-blue-500 rounded-full mr-2"></span>
+                <span className="flex-1">Financial Assets</span>
+                <span className="font-bold">34%</span>
+              </li>
+            </ul>
+          </div>
+          
+          {/* Stock Market Participation */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-green-300 border-b border-green-700 pb-2">Stock Market Participation</h3>
+            
+            <div className="space-y-5">
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <p className="text-sm text-gray-400 mb-1">Equity Market Exposure</p>
+                <div className="flex items-end space-x-2">
+                  <span className="text-3xl font-bold text-red-400">4.7%</span>
+                  <span className="text-sm text-gray-400 pb-1">of Indian households</span>
+                </div>
+                <p className="text-xs text-gray-400 mt-1">Lowest among major global economies</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gray-700 p-3 rounded-lg">
+                  <p className="text-xs text-gray-400">Compared to:</p>
+                  <p className="font-bold">Europe</p>
+                  <p className="text-xl text-yellow-400">3× higher</p>
+                </div>
+                <div className="bg-gray-700 p-3 rounded-lg">
+                  <p className="text-xs text-gray-400">Compared to:</p>
+                  <p className="font-bold">United States</p>
+                  <p className="text-xl text-red-400">4× higher</p>
+                </div>
+              </div>
+              
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <p className="text-sm text-gray-400">Unbanked Population</p>
+                <div className="flex justify-between mt-2">
+                  <div className="text-center">
+                    <p className="text-xs">Rural</p>
+                    <p className="text-xl font-bold text-purple-400">33%</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs">Urban</p>
+                    <p className="text-xl font-bold text-blue-400">29%</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trading Simulator Impact Section */}
+      <section className="mb-10 bg-gray-800 p-6 rounded-xl shadow-inner">
+        <div className="flex items-center mb-6">
+          <div className="bg-yellow-600 w-1 h-8 mr-3 rounded-full"></div>
+          <h2 className="text-2xl font-bold text-white">Educational Impact of Trading Simulations</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Benefits */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-green-300 border-b border-green-700 pb-2">Benefits of Simulation-Based Learning</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start">
+                <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">1</span>
+                <p>Develops <span className="font-bold">critical thinking skills</span> through profit/loss analysis without real-world risk</p>
+              </li>
+              <li className="flex items-start">
+                <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">2</span>
+                <p>Increases <span className="font-bold">student interest in investing</span> regardless of simulation performance (proven in studies)</p>
+              </li>
+              <li className="flex items-start">
+                <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">3</span>
+                <p>Bridges the <span className="font-bold">theory-practice gap</span> in financial markets education</p>
+              </li>
+              <li className="flex items-start">
+                <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">4</span>
+                <p>Provides <span className="font-bold">realistic environments</span> for learning trading strategies with real-time data</p>
+              </li>
+            </ul>
+          </div>
+          
+          {/* Learning Outcomes */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-purple-300 border-b border-purple-700 pb-2">Learning Outcomes</h3>
+            <div className="space-y-4">
+              <div className="bg-gray-700 p-4 rounded-lg border-l-4 border-yellow-500">
+                <p>&quot;Users analyze markets, make informed decisions, and observe results <span className="font-bold text-yellow-300">risk-free</span>&quot;</p>
+              </div>
+              <div className="bg-gray-700 p-4 rounded-lg border-l-4 border-green-500">
+                <p>&quot;Mistakes become <span className="font-bold text-green-300">learning opportunities</span> without financial consequences&quot;</p>
+              </div>
+              <div className="bg-gray-700 p-4 rounded-lg border-l-4 border-blue-500">
+                <p>&quot;Strategy testing leads to <span className="font-bold text-blue-300">skill improvement</span> over time&quot;</p>
+              </div>
+              <div className="bg-gray-700 p-4 rounded-lg border-l-4 border-red-500">
+                <p className="text-sm">Key Insight: <span className="font-bold">Education maintains interest</span> even for poor performers (no correlation with actual performance)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Project Innovation Section */}
+      <section className="mb-10 bg-gradient-to-br from-blue-900 to-purple-900 p-6 rounded-xl shadow-lg">
+        <div className="flex items-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-yellow-300 mr-3" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+          </svg>
+          <h2 className="text-2xl font-bold text-white">Innovation Value of Your Trading Simulator</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Market Needs */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-yellow-300 border-b border-yellow-700 pb-2">Addressing Market Needs</h3>
+            <div className="space-y-4">
+              <div className="bg-black/20 p-4 rounded-lg backdrop-blur-sm">
+                <p className="font-bold text-white mb-1">Bridging the Literacy Gap</p>
+                <p>Targets the <span className="text-yellow-300 font-bold">42-54% disparity</span> between general and financial literacy</p>
+              </div>
+              <div className="bg-black/20 p-4 rounded-lg backdrop-blur-sm">
+                <p className="font-bold text-white mb-1">Overcoming Fear Barriers</p>
+                <p>Simulation approach reduces <span className="text-red-300 font-bold">hesitation toward markets</span> caused by loss anxiety</p>
+              </div>
+              <div className="bg-black/20 p-4 rounded-lg backdrop-blur-sm">
+                <p className="font-bold text-white mb-1">Inclusive Education</p>
+                <p>Directly serves the <span className="text-blue-300 font-bold">32.2% completely illiterate</span> population segment</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Economic Impact */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-green-300 border-b border-green-700 pb-2">Potential Economic Impact</h3>
+            <div className="space-y-4">
+              <div className="bg-black/20 p-4 rounded-lg backdrop-blur-sm border-l-4 border-blue-500">
+                <p className="font-bold text-white mb-1">Vision 2047 Alignment</p>
+                <p>Supports India's development goals by creating <span className="text-blue-300 font-bold">financially empowered citizens</span></p>
+              </div>
+              <div className="bg-black/20 p-4 rounded-lg backdrop-blur-sm border-l-4 border-yellow-500">
+                <p className="font-bold text-white mb-1">Wealth Redistribution</p>
+                <p>Could shift savings from real estate/gold (<span className="text-yellow-300 font-bold">66%</span>) to <span className="text-green-300 font-bold">productive financial assets</span></p>
+              </div>
+              <div className="bg-black/20 p-4 rounded-lg backdrop-blur-sm border-l-4 border-purple-500">
+                <p className="font-bold text-white mb-1">Dual Benefit</p>
+                <p>Drives both <span className="text-purple-300 font-bold">individual prosperity</span> and <span className="text-purple-300 font-bold">national economic growth</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Project Features Section */}
+      <section className="mb-10 bg-gray-800 p-6 rounded-xl shadow-inner">
+        <h2 className="text-2xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400">
+          Project Differentiation Features
+        </h2>
+        
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Comprehensive Learning */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-blue-300 border-b border-blue-700 pb-2 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+              </svg>
+              Comprehensive Learning Approach
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="flex items-start bg-gray-700 p-4 rounded-lg">
+                <div className="bg-blue-600/20 p-2 rounded-lg mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-white mb-1">Foundational Modules</p>
+                  <p className="text-sm">Covers fundamental concepts for the <span className="text-blue-300">42.8% with elementary literacy</span></p>
+                </div>
+              </div>
+              
+              <div className="flex items-start bg-gray-700 p-4 rounded-lg">
+                <div className="bg-green-600/20 p-2 rounded-lg mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-white mb-1">Assessment Quizzes</p>
+                  <p className="text-sm">Validates learning against <span className="text-green-300">academic research</span> on education's role</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start bg-gray-700 p-4 rounded-lg">
+                <div className="bg-red-600/20 p-2 rounded-lg mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-white mb-1">Risk-Free Simulation</p>
+                  <p className="text-sm">Specifically targets <span className="text-red-300">equity market hesitation</span> (only 4% participation)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Social Learning */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-purple-300 border-b border-purple-700 pb-2 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
+              </svg>
+              Social Learning Integration
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="flex items-start bg-gray-700 p-4 rounded-lg">
+                <div className="bg-purple-600/20 p-2 rounded-lg mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-white mb-1">Collaborative Tools</p>
+                  <p className="text-sm">Chat with research features enables <span className="text-purple-300">informed decision-making</span></p>
+                </div>
+              </div>
+              
+              <div className="flex items-start bg-gray-700 p-4 rounded-lg">
+                <div className="bg-yellow-600/20 p-2 rounded-lg mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-white mb-1">Real-Time Market Data</p>
+                  <p className="text-sm">Connects <span className="text-yellow-300">theory with practical context</span> using live information</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start bg-gray-700 p-4 rounded-lg">
+                <div className="bg-green-600/20 p-2 rounded-lg mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-white mb-1">Community Support</p>
+                  <p className="text-sm">Overcomes <span className="text-green-300">psychological barriers</span> through peer learning</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Conclusion Section */}
+      <section className="bg-black/30 p-6 rounded-xl border border-gray-700 backdrop-blur-sm">
+        <h2 className="text-2xl font-bold text-center mb-6 text-white">Strategic Conclusion</h2>
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="mb-4 text-lg">Your trading simulator <span className="font-bold text-yellow-300">directly addresses India's financial literacy challenges</span> through an innovative, multi-modal approach combining:</p>
+          
+          <div className="grid grid-cols-4 gap-2 mb-6">
+            <span className="bg-blue-900/50 text-blue-100 px-2 py-1 rounded-full text-sm">Education</span>
+            <span className="bg-purple-900/50 text-purple-100 px-2 py-1 rounded-full text-sm">Assessment</span>
+            <span className="bg-green-900/50 text-green-100 px-2 py-1 rounded-full text-sm">Simulation</span>
+            <span className="bg-yellow-900/50 text-yellow-100 px-2 py-1 rounded-full text-sm">Community</span>
+          </div>
+          
+          <p className="mb-4 font-medium">The statistical evidence demonstrates that such tools are <span className="underline">not merely beneficial but essential</span> for:</p>
+          
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-gradient-to-r from-blue-900/50 to-blue-900/0 p-4 rounded-lg border-l-4 border-blue-500">
+              <p className="font-bold">India's Economic Transformation</p>
+              <p className="text-sm">Supporting the 2047 developed nation vision</p>
+            </div>
+            <div className="bg-gradient-to-r from-purple-900/50 to-purple-900/0 p-4 rounded-lg border-l-4 border-purple-500">
+              <p className="font-bold">Individual Financial Empowerment</p>
+              <p className="text-sm">Creating informed investors and savers</p>
+            </div>
+          </div>
+          
+          <p className="text-yellow-400 font-bold">This project represents a critical intervention at the intersection of education, technology, and economic development.</p>
+        </div>
+      </section>
+
+      {/* Sources Section */}
+      <footer className="mt-12 bg-gray-800 p-6 rounded-xl">
+        <h3 className="text-lg font-semibold mb-4 text-blue-300 border-b border-blue-700 pb-2">Research Sources</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <h4 className="font-bold text-gray-300 mb-2">Official Reports</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <a href="https://www.moneycontrol.com/news/business/markets/financial-literacy-will-be-key-to-india-s-vision-for-2047-amfi-s-venkat-chalasani-12888370.html" className="text-blue-400 hover:underline flex items-center" target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  MoneyControl Annual Report on Financial Inclusion
+                </a>
+              </li>
+              <li>
+                <a href="https://www.newindianexpress.com/business/2024/Apr/15/why-is-financial-literacy-falling-short" className="text-blue-400 hover:underline flex items-center" target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  New Indian Express National Financial Literacy Survey
+                </a>
+              </li>
+              <li>
+                <a href="https://www.business-standard.com/content/press-releases-ani/spreading-the-financial-literacy-wave-across-india-national-finance-olympiad-2023-123122100732_1.html" className="text-blue-400 hover:underline flex items-center" target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Business Standard Investor Education Journals
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-gray-300 mb-2">Academic Studies</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <a href="https://www.adb.org/results/india-financial-literacy-programs-lifting-families-out-debt-fueling-new-prosperity" className="text-blue-400 hover:underline flex items-center" target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  ABD Simulation Learning Research
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/pulse/why-financial-literacy-india-important-centricity-wealthtech-yayvc" className="text-blue-400 hover:underline flex items-center" target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Linkedin Global Financial Literacy Comparisons
+                </a>
+              </li>
+              <li>
+                <a href="https://zerodha.com/varsity/" className="text-blue-400 hover:underline flex items-center" target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Zerodha World Bank Global Findex Database
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
               </motion.div>
               
               
@@ -305,7 +823,7 @@ export default function Home() {
         </section>
 
         {/* Pricing Plans Section */}
-        <section id="pricing" className="py-20">
+        {/* <section id="pricing" className="py-20">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -412,7 +930,7 @@ export default function Home() {
               ))}
             </div>
           </motion.div>
-        </section>
+        </section> */}
 
        {/* Team Section */}
         <section id="team" className="py-20">
@@ -424,7 +942,7 @@ export default function Home() {
             className="max-w-5xl mx-auto"
           >
             <h2 className="text-3xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-              Meet Our Expert Team
+              Meet Our Team
             </h2>
             
             <div className="relative h-96">
@@ -499,70 +1017,12 @@ export default function Home() {
 
 
         {/* Feedback Form Section */}
-        <section className="py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto bg-gray-800/50 backdrop-blur-sm p-8 rounded-xl border border-gray-700"
-          >
-            <h2 className="text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-              We'd Love Your Feedback
-            </h2>
-            <p className="text-gray-300 text-center mb-8">
-              Help us improve Investopia by sharing your thoughts
-            </p>
-            
-            <form className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-gray-300 mb-2">Name</label>
-                <input 
-                  type="text" 
-                  id="name" 
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 text-white"
-                  placeholder="Your name"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-gray-300 mb-2">Email</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 text-white"
-                  placeholder="your@email.com"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="feedback" className="block text-gray-300 mb-2">Feedback</label>
-                <textarea 
-                  id="feedback" 
-                  rows={5}
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 text-white"
-                  placeholder="Your valuable feedback..."
-                ></textarea>
-              </div>
-              
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="pt-2"
-              >
-                <button 
-                  type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white font-medium hover:opacity-90 transition"
-                >
-                  Submit Feedback
-                </button>
-              </motion.div>
-            </form>
-          </motion.div>
-        </section>
+        {/* <section className="py-20">
+        <FinancialLiteracyReport />
+        </section> */}
 
         {/* Footer */}
-        <footer className="py-12 border-t border-gray-800">
+        {/* <footer className="py-12 border-t border-gray-800">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -646,7 +1106,7 @@ export default function Home() {
               </div>
             </div>
           </motion.div>
-        </footer>
+        </footer> */}
       </div>
     </div>
   );

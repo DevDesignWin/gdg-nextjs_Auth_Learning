@@ -340,10 +340,10 @@ const OnboardingPage = () => {
           body: JSON.stringify(profileData)
         });
 
-        if (!response.ok) {
-          console.error('API Error:', await response.text());
-          throw new Error('Failed to save profile via API');
-        }
+        // if (!response.ok) {
+        //   console.error('API Error:', await response.text());
+        //   throw new Error('Failed to save profile via API');
+        // }
       } catch (apiError) {
         console.error('API call failed (non-critical):', apiError);
         // Continue even if API call fails since we've saved to Firestore

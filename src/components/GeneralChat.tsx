@@ -273,6 +273,8 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
     e.preventDefault();
     setIsLoading(true);
     try {
+      console.log("authToken:", authToken)
+
       const endpoint = userProfile ? '/v1/profile' : '/v1/profile';
       const method = userProfile ? 'PUT' : 'POST';
 
