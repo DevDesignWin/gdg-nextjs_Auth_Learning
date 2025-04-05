@@ -1,11 +1,12 @@
 "use client"
 
+import Link from "next/link"
 import SandboxComponent from "./sandbox"
 import { useState, useEffect, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts"
-import { Play, Pause, DollarSign, TrendingUp, BarChart2, Clock, Info, Newspaper } from "lucide-react"
+import { Play, Pause, DollarSign, TrendingUp, BarChart2, Clock, Info, Newspaper, RefreshCcw } from "lucide-react"
 import useMetricsStore from "./metrics-store"
 import MetricsTopbar from "./metrics-topbar"
 
@@ -16,9 +17,7 @@ const fetchStockData = async (stock) => {
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`)
     }
-    const data = await response.json();
-    console.log(data)
-    return data;
+    return await response.json()
   } catch (error) {
     console.error("Error fetching stock data:", error)
     throw error
@@ -62,13 +61,7 @@ export default function InvestmentSimulator() {
   const newsIntervalRef = useRef(null)
 
   // Get metrics store actions
-  const {
-    updateMetrics,
-    moneyLeft,
-    updateBuyPrices,
-    markSharesAsSold,
-    portfolioValue: storePortfolioValue,
-  } = useMetricsStore()
+  const { updateMetrics, resetMetrics, moneyLeft, updateBuyPrices, markSharesAsSold } = useMetricsStore()
 
   // Initialize state from persisted store
   useEffect(() => {
@@ -82,8 +75,8 @@ export default function InvestmentSimulator() {
         setLoading(true)
         setError(null)
 
-        // Important: Don't reset metrics when changing stocks
-        // We want to persist portfolio values across stock changes
+        // Don't reset metrics when changing stocks
+        // resetMetrics()
 
         const response = await fetchStockData(stockSymbol)
         const data = response.data || []
@@ -127,10 +120,12 @@ export default function InvestmentSimulator() {
         setMonthlyGroups(groups)
 
         // Set visible index to first day
-        setVisibleDataIndex(Math.min(1, processedData.length - 1))
+        setVisibleDataIndex(Math.min(visibleDataIndex, processedData.length - 1))
 
-        // Important: Don't reset portfolio and transactions when changing stocks
-        // This ensures portfolio values persist across stock changes
+        // Don't reset portfolio and transactions when changing stocks
+        // setPortfolio({})
+        // setTransactions([])
+        // setBalance(10000)
       } catch (error) {
         setError("Failed to load stock data. Please try again later.")
         console.error("Error fetching stock data:", error)
@@ -228,15 +223,26 @@ export default function InvestmentSimulator() {
 
   // Calculate portfolio value
   const portfolioShares = portfolio[stockSymbol] || 0
-  const currentStockValue = portfolioShares * currentPrice
-  const totalValue = balance + storePortfolioValue
+  const portfolioValue = portfolioShares * currentPrice
+  const totalValue = balance + portfolioValue
 
   // Update metrics when portfolio value or balance changes
   useEffect(() => {
     updateMetrics({
       moneyLeft: balance,
+      portfolioValue: portfolioValue,
     })
-  }, [balance, updateMetrics])
+  }, [balance, portfolioValue, updateMetrics])
+
+  // Reset simulation
+  const resetSimulation = () => {
+    resetMetrics()
+    setBalance(10000)
+    setPortfolio({})
+    setTransactions([])
+    setVisibleDataIndex(Math.min(1, stockData.length - 1))
+    setPlaying(false)
+  }
 
   // Buy stocks
   const buyStock = () => {
@@ -395,6 +401,9 @@ export default function InvestmentSimulator() {
             Investment Simulator
           </h1>
           <div className="flex items-center space-x-4 mt-2 md:mt-0">
+            <Link href="/learning"><div className="bg-green-600 bg-opacity-50 rounded-lg px-4 py-2">
+              <span className="font-medium">Learning Corner</span>
+            </div></Link>
             <div className="bg-indigo-900 bg-opacity-50 rounded-lg px-4 py-2">
               <span className="font-medium">Stock: </span>
               <span className="font-bold">{stockSymbol}</span>
@@ -411,6 +420,13 @@ export default function InvestmentSimulator() {
                 <span className="font-bold">{currentDayData.formattedDate}</span>
               </div>
             )}
+            <button
+              onClick={resetSimulation}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-4 py-2 flex items-center transition-colors"
+            >
+              <RefreshCcw size={16} className="mr-2" />
+              Reset
+            </button>
           </div>
         </div>
       </header>
@@ -590,16 +606,12 @@ export default function InvestmentSimulator() {
                 <span className="font-semibold text-gray-800">${balance.toFixed(2)}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-gray-600">Current Stock Shares:</span>
+                <span className="text-gray-600">Shares Owned:</span>
                 <span className="font-semibold text-gray-800">{portfolioShares}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-gray-600">Current Stock Value:</span>
-                <span className="font-semibold text-gray-800">${currentStockValue.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-gray-600">Total Portfolio Value:</span>
-                <span className="font-semibold text-gray-800">${storePortfolioValue.toFixed(2)}</span>
+                <span className="text-gray-600">Stock Value:</span>
+                <span className="font-semibold text-gray-800">${portfolioValue.toFixed(2)}</span>
               </div>
               <div className="flex justify-between pt-3 text-lg">
                 <span className="font-bold text-gray-700">Total Value:</span>
@@ -682,7 +694,7 @@ export default function InvestmentSimulator() {
                     -
                   </button>
                   <input
-                    type="number"
+                    type="text"
                     min="1"
                     value={shareAmount}
                     onChange={(e) => setShareAmount(Math.max(1, Number.parseInt(e.target.value) || 1))}

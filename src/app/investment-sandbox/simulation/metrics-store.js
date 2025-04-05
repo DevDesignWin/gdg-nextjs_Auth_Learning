@@ -1,9 +1,7 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
 
 // Zustand store for financial metrics with persistence
 const useMetricsStore = create(
-  persist(
     (set, get) => ({
       initialInvestment: 10000,
       totalProfit: 0,
@@ -18,18 +16,11 @@ const useMetricsStore = create(
         const buyPrices = get().buyPrices
         let unrealizedProfit = 0
         let unrealizedLoss = 0
-        let totalPortfolioValue = 0
 
         // Calculate unrealized profit/loss for each stock
         Object.keys(buyPrices).forEach((symbol) => {
           if (currentPrices[symbol]) {
             const currentPrice = currentPrices[symbol]
-
-            // Count unsold shares for this symbol
-            const unsoldShares = buyPrices[symbol].filter((share) => !share.sold).length
-
-            // Add to portfolio value
-            totalPortfolioValue += unsoldShares * currentPrice
 
             buyPrices[symbol].forEach((share) => {
               if (!share.sold) {
@@ -47,7 +38,6 @@ const useMetricsStore = create(
         set({
           totalProfit: unrealizedProfit,
           totalLoss: unrealizedLoss,
-          portfolioValue: totalPortfolioValue,
         })
       },
 
@@ -134,12 +124,7 @@ const useMetricsStore = create(
           buyPrices: {},
         }),
     }),
-    {
-      name: "investment-metrics", // Storage key
-      getStorage: () => localStorage, // Use localStorage for persistence
-    },
-  ),
+  
 )
 
 export default useMetricsStore
-
