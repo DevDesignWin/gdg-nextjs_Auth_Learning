@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronDown, FiChevronUp, FiPlay, FiBookOpen, FiCheckCircle, FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import Link from 'next/link';
 
 interface Lecture {
   id: string;
@@ -26,8 +27,8 @@ const CoursePage = () => {
   const [modules, setModules] = useState<Module[]>([
     {
       id: 'm1',
-      title: 'Introduction to Trading',
-      description: 'Learn the fundamentals of trading and market analysis',
+      title: 'Module 1: Financial Fundamentals for Beginners',
+      description: 'Introduces key financial literacy concepts in India, highlighting its role in personal and national economic growth.',
       expanded: false,
       lectures: [
         {
@@ -50,18 +51,18 @@ const CoursePage = () => {
         },
         {
           id: 'l3',
-          title: 'Basic Terminology',
+          title: 'Financial Literacy',
           duration: '5 min read',
           type: 'article',
           completed: false,
-          articleContent: 'Trading involves buying and selling financial instruments...'
+          articleContent: 'Money Basics and Digital Transactions : Building on the NISM curriculum, this unit covers the fundamentals of money, income sources, and transaction types. Given India rapid digital transformation, special emphasis is placed on digital payment systems like UPI, IMPS, and mobile banking applications that are revolutionizing how Indians manage money. Banking and Financial Services in India : This unit introduces the Indian banking system, different types of bank accounts, and how to choose the right banking services based on individual needs. Following Khan Academys approach, students will learn to evaluate banking options and develop smart money management strategies specific to the Indian financial ecosystem.'
         }
       ]
     },
     {
       id: 'm2',
-      title: 'Technical Analysis',
-      description: 'Master chart patterns, indicators, and technical tools',
+      title: 'Module 2: Saving and Planning for the Future',
+      description: 'Explains emergency savings, setting targets suited to India, and safe, accessible storage options.',
       expanded: false,
       lectures: [
         {
@@ -80,17 +81,25 @@ const CoursePage = () => {
           type: 'article',
           completed: false,
           articleContent: 'Support and resistance are key concepts in technical analysis...'
+        },
+        {
+          id: 'l6',
+          title: 'Building an Emergency Fund',
+          duration: '5 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Goal-based Financial Planning Learners will discover how to set SMART financial goals for different life stages and develop effective plans to achieve them. This includes planning for education, marriage, home purchase, and other significant life events typical in the Indian context.Understanding Inflation and Time Value of Money This section explores how inflation affects purchasing power in the Indian economy and introduces the concept of the time value of money, demonstrating why early saving and investing are crucial for building wealth.Retirement Planning for Indians Following Khan Academys retirement planning approach, this unit covers the unique aspects of retirement planning in India, including government schemes like NPS, PPF, and strategies for ensuring financial security in later years.'
         }
       ]
     },
     {
       id: 'm3',
-      title: 'Risk Management',
-      description: 'Learn how to protect your capital and manage risk',
+      title: 'Module 3: Introduction to Investments',
+      description: 'Covers basic investments, risk-return trade-off, and compounding, with Indian market examples.',
       expanded: false,
       lectures: [
         {
-          id: 'l6',
+          id: 'l7',
           title: 'Position Sizing',
           duration: '9:15',
           type: 'video',
@@ -99,12 +108,186 @@ const CoursePage = () => {
           videoUrl: 'https://www.youtube.com/watch?v=5qap5aO4i9A'
         },
         {
-          id: 'l7',
+          id: 'l8',
           title: 'Risk-Reward Ratio',
           duration: '7 min read',
           type: 'article',
           completed: false,
           articleContent: 'Understanding risk-reward ratio is crucial for long-term success...'
+        },
+        {
+          id: 'l9',
+          title: 'Investment Fundamentals',
+          duration: '5 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Traditional Investment Options in India Covering popular traditional investment avenues in India such as fixed deposits, recurring deposits, post office schemes, Public Provident Fund (PPF), and National Savings Certificates (NSC), this section helps students understand low-risk investment options.Modern Investment Alternatives This unit introduces mutual funds, SIPs, bonds, and other modern investment options gaining popularity in India, with guidance on how beginners can start investing with small amounts.Understanding Gold as an Investment Given gold cultural and financial significance in India, this special unit explains different ways to invest in gold beyond traditional jewelry, including gold ETFs, Sovereign Gold Bonds, and digital gold.'
+        }
+      ]
+    },
+    {
+      id: 'm4',
+      title: 'Module 4: Introduction to Stock Markets',
+      description: 'Explains stocks, Indian stock market basics, and key indices like Sensex and Nifty.',
+      expanded: false,
+      lectures: [
+        {
+          id: 'l10',
+          title: 'Candlestick Patterns',
+          duration: '15:20',
+          type: 'video',
+          completed: false,
+          videoThumbnail: 'https://i.ytimg.com/vi/GEYf1qQb4eE/hqdefault.jpg',
+          videoUrl: 'https://www.youtube.com/watch?v=GEYf1qQb4eE'
+        },
+        {
+          id: 'l11',
+          title: 'Support and Resistance',
+          duration: '10 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Support and resistance are key concepts in technical analysis...'
+        },
+        {
+          id: 'l12',
+          title: 'Understanding the Indian Stock Market',
+          duration: '5 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Understanding the Indian Stock Market Following the approach of beginner stock market courses, this unit explains what stocks are, how the Indian stock market works, and introduces key market indices like Sensex and Nifty.Stock Market Participants and Infrastructure This section covers the roles of various market participants including SEBI, stock exchanges (NSE and BSE), brokers, depositories (NSDL and CDSL), and clearing corporations in the Indian context.Basics of Stock Investing Students will learn how to open a demat account, place different types of orders, read basic stock information, and understand stock market terminology with an Indian perspective.Fundamental Analysis Basics This unit introduces the concept of analyzing companies through financial statements, ratios, and business models to make informed investment decisions in the Indian market.'
+        }
+      ]
+    },
+    {
+      id: 'm5',
+      title: 'Module 5: Advanced Investment Knowledge',
+      description: 'Introduces chart patterns, trends, and technical indicators for analyzing stock prices in India.',
+      expanded: false,
+      lectures: [
+        {
+          id: 'l13',
+          title: 'Candlestick Patterns',
+          duration: '15:20',
+          type: 'video',
+          completed: false,
+          videoThumbnail: 'https://i.ytimg.com/vi/GEYf1qQb4eE/hqdefault.jpg',
+          videoUrl: 'https://www.youtube.com/watch?v=GEYf1qQb4eE'
+        },
+        {
+          id: 'l14',
+          title: 'Support and Resistance',
+          duration: '10 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Support and resistance are key concepts in technical analysis...'
+        },
+        {
+          id: 'l15',
+          title: 'Technical Analysis Introduction',
+          duration: '5 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Mutual Funds Deep Dive This comprehensive unit covers different types of mutual funds available in India, understanding fund factsheets, expense ratios, NAV, and strategies for selecting funds aligned with financial goals. Portfolio Construction and Asset Allocation Students will learn how to build a diversified portfolio across asset classes tailored to their risk profile and financial goals in the Indian market environment. Tax-Efficient Investing This important section covers tax implications of different investments in India, tax-saving investment options under Section 80C, and strategies for optimizing investment returns after taxes.'
+        }
+      ]
+    },
+    {
+      id: 'm6',
+      title: 'Module 6: Managing Credit and Debt',
+      description: 'Explains India credit system, CIBIL scores, credit reports, and maintaining good credit history.',
+      expanded: false,
+      lectures: [
+        {
+          id: 'l16',
+          title: 'Candlestick Patterns',
+          duration: '15:20',
+          type: 'video',
+          completed: false,
+          videoThumbnail: 'https://i.ytimg.com/vi/GEYf1qQb4eE/hqdefault.jpg',
+          videoUrl: 'https://www.youtube.com/watch?v=GEYf1qQb4eE'
+        },
+        {
+          id: 'l17',
+          title: 'Support and Resistance',
+          duration: '10 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Support and resistance are key concepts in technical analysis...'
+        },
+        {
+          id: 'l18',
+          title: 'Credit Fundamentals',
+          duration: '5 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Responsible Borrowing Students will learn about different types of loans available in India, comparing interest rates, understanding loan terms, and assessing the true cost of borrowing. Credit Cards and Digital Credit This section covers the responsible use of credit cards and newer digital credit options in India, including how to avoid debt traps and manage repayments effectively.Debt Management Strategies This practical unit provides strategies for managing and reducing debt, dealing with financial emergencies, and understanding debt restructuring options available in India.'
+        }
+      ]
+    },
+
+    {
+      id: 'm7',
+      title: 'Module 7: Risk Management and Insurance',
+      description: 'Building on NISMs risk and reward curriculum, this unit helps students identify and evaluate different types of financial risks in the Indian context.',
+      expanded: false,
+      lectures: [
+        {
+          id: 'l19',
+          title: 'Candlestick Patterns',
+          duration: '15:20',
+          type: 'video',
+          completed: false,
+          videoThumbnail: 'https://i.ytimg.com/vi/GEYf1qQb4eE/hqdefault.jpg',
+          videoUrl: 'https://www.youtube.com/watch?v=GEYf1qQb4eE'
+        },
+        {
+          id: 'l20',
+          title: 'Support and Resistance',
+          duration: '10 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Support and resistance are key concepts in technical analysis...'
+        },
+        {
+          id: 'l21',
+          title: 'Understanding Financial Risk',
+          duration: '5 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Life Insurance Basics This section explains the importance of life insurance, different policy types available in India, and how to calculate appropriate coverage based on individual circumstances. Health and Medical Insurance Given the rising healthcare costs in India, this unit covers health insurance fundamentals, claim processes, and how to select appropriate coverage for different life stages.Property and Asset Insurance Students will learn about protecting physical assets through insurance, including home insurance, vehicle insurance, and other protection products relevant to the Indian market.'
+        }
+      ]
+    },
+    {
+      id: 'm8',
+      title: 'Module 8: Consumer Protection and Fraud Prevention',
+      description: 'Covers common financial scams in India and how to identify and avoid them.',
+      expanded: false,
+      lectures: [
+        {
+          id: 'l22',
+          title: 'Candlestick Patterns',
+          duration: '15:20',
+          type: 'video',
+          completed: false,
+          videoThumbnail: 'https://i.ytimg.com/vi/GEYf1qQb4eE/hqdefault.jpg',
+          videoUrl: 'https://www.youtube.com/watch?v=GEYf1qQb4eE'
+        },
+        {
+          id: 'l23',
+          title: 'Support and Resistance',
+          duration: '10 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Support and resistance are key concepts in technical analysis...'
+        },
+        {
+          id: 'l24',
+          title: 'Common Financial Scams in India',
+          duration: '5 min read',
+          type: 'article',
+          completed: false,
+          articleContent: 'Rights and Protections for Financial Consumers This section explains the legal framework protecting financial consumers in India, including the role of regulators like RBI, SEBI, and IRDAI. Digital Financial Security Students will learn essential cybersecurity practices for protecting financial information, secure banking habits, and what to do if they become victims of financial fraud. Grievance Redressal Mechanisms This practical unit covers the process for filing complaints with various financial institutions and regulators in India when facing issues with financial products or services.'
         }
       ]
     }
@@ -218,6 +401,16 @@ const CoursePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 p-4 md:p-8">
+        <Link href="/learning" passHref>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 px-4 py-2 mb-7 bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all"
+        >
+          <FiArrowLeft className="text-lg" />
+          <span>Back</span>
+        </motion.button>
+      </Link>
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

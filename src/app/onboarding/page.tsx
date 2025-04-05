@@ -3,10 +3,13 @@
 import { useState, useEffect, JSX } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { FiArrowRight, FiArrowLeft, FiCheck, FiDollarSign, FiBriefcase, FiAward, FiPieChart, FiTrendingUp, FiBarChart2, FiCalendar, FiHome, FiDatabase } from 'react-icons/fi';
+import { FiArrowRight, FiArrowLeft, FiCheck, FiDollarSign, FiBriefcase, FiAward, FiPieChart, FiTrendingUp, FiBarChart2, FiCalendar, FiHome, FiDatabase, FiUser } from 'react-icons/fi';
 import Image from 'next/image';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { useAuth } from '@/context/AuthContext';
+import { User } from 'firebase/auth';
 
-// Define types for our questions
 type QuestionType = 'slider' | 'single-select' | 'multi-select';
 
 interface BaseQuestion {
@@ -30,37 +33,45 @@ interface SelectQuestion extends BaseQuestion {
 
 type Question = SliderQuestion | SelectQuestion;
 
-// Stock and crypto data with IDs and logos
-const investmentOptions = [
-  { id: 'stock-aapl', name: 'Apple (AAPL)', logo: '/images/aapl.png' },
-  { id: 'stock-msft', name: 'Microsoft (MSFT)', logo: '/images/msft.webp' },
-  { id: 'stock-googl', name: 'Alphabet (GOOGL)', logo: '/images/google.webp' },
-  { id: 'stock-amzn', name: 'Amazon (AMZN)', logo: '/images/amzn.png' },
-  { id: 'stock-tsla', name: 'Tesla (TSLA)', logo: '/images/tsla.png' },
-  { id: 'stock-nflx', name: 'Netflix (NFLX)', logo: '/images/nflx.png' },
-  { id: 'crypto-btc', name: 'Bitcoin (BTC)', logo: '/images/btc.png' },
-  { id: 'crypto-eth', name: 'Ethereum (ETH)', logo: '/images/eth.png' },
-  { id: 'crypto-sol', name: 'Solana (SOL)', logo: '/images/sol.png' },
-  { id: 'crypto-bnb', name: 'BNB (BNB)', logo: '/images/bnb.png' },
-  { id: 'crypto-xrp', name: 'XRP (XRP)', logo: '/images/xrp.png' },
-  { id: 'crypto-doge', name: 'Dogecoin (DOGE)', logo: '/images/doge.png' },
+interface InvestmentOption {
+  id: string;
+  name: string;
+  logo: string;
+  symbol?: string;
+}
+
+const investmentOptions: InvestmentOption[] = [
+  { id: 'stock-aapl', name: 'Apple (AAPL)', logo: '/images/aapl.png', symbol: 'AAPL' },
+  { id: 'stock-msft', name: 'Microsoft (MSFT)', logo: '/images/msft.webp', symbol: 'MSFT' },
+  { id: 'stock-googl', name: 'Alphabet (GOOGL)', logo: '/images/google.webp', symbol: 'GOOGL' },
+  { id: 'stock-amzn', name: 'Amazon (AMZN)', logo: '/images/amzn.png', symbol: 'AMZN' },
+  { id: 'stock-tsla', name: 'Tesla (TSLA)', logo: '/images/tsla.png', symbol: 'TSLA' },
+  { id: 'stock-nflx', name: 'Netflix (NFLX)', logo: '/images/nflx.png', symbol: 'NFLX' },
+  { id: 'crypto-btc', name: 'Bitcoin (BTC)', logo: '/images/btc.png', symbol: 'BTC' },
+  { id: 'crypto-eth', name: 'Ethereum (ETH)', logo: '/images/eth.png', symbol: 'ETH' },
+  { id: 'crypto-sol', name: 'Solana (SOL)', logo: '/images/sol.png', symbol: 'SOL' },
+  { id: 'crypto-bnb', name: 'BNB (BNB)', logo: '/images/bnb.png', symbol: 'BNB' },
+  { id: 'crypto-xrp', name: 'XRP (XRP)', logo: '/images/xrp.png', symbol: 'XRP' },
+  { id: 'crypto-doge', name: 'Dogecoin (DOGE)', logo: '/images/doge.png', symbol: 'DOGE' },
 ];
 
 const OnboardingPage = () => {
   const router = useRouter();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [name, setName] = useState('');
 
   const questions: Question[] = [
-    // {
-    //   id: 'name',
-    //   question: 'What is your name?',
-    //   type: 'single-select',
-    //   options: ['John', 'Jane', 'Mike', 'Sarah'], // In a real app, this would be a text input
-    //   icon: <FiAward className="text-blue-500" size={24} />
-    // },
+    {
+      id: 'name',
+      question: 'What is your name?',
+      type: 'single-select',
+      options: [],
+      icon: <FiUser className="text-blue-500" size={24} />
+    },
     {
       id: 'age',
       question: 'How old are you?',
@@ -68,6 +79,13 @@ const OnboardingPage = () => {
       min: 18,
       max: 100,
       icon: <FiAward className="text-blue-500" size={24} />
+    },
+    {
+      id: 'profession',
+      question: 'What is your profession?',
+      type: 'single-select',
+      options: ['Employed', 'Self-employed', 'Unemployed'],
+      icon: <FiBriefcase className="text-blue-500" size={24} />
     },
     {
       id: 'monthlyincome',
@@ -85,7 +103,7 @@ const OnboardingPage = () => {
     },
     {
       id: 'primaryreasonforinvesting',
-      question: 'What is your primary reason for investing? ',
+      question: 'What is your primary reason for investing?',
       type: 'single-select',
       options: [
         'I want to grow my wealth',
@@ -144,12 +162,12 @@ const OnboardingPage = () => {
     }
   ];
 
-  // Type guard for slider questions
+  // Check if question is a slider question
   const isSliderQuestion = (question: Question): question is SliderQuestion => {
     return question.type === 'slider';
   };
 
-  // Type guard for select questions
+  // Check if question is a select question
   const isSelectQuestion = (question: Question): question is SelectQuestion => {
     return question.type === 'single-select' || question.type === 'multi-select';
   };
@@ -157,7 +175,7 @@ const OnboardingPage = () => {
   const currentQuestion = questions[currentStep];
   const isOptional = currentQuestion.optional;
   
-  // Type-safe check for answer existence
+  // Check if current question has an answer
   const hasAnswer = () => {
     if (isSliderQuestion(currentQuestion)) {
       return answers[currentQuestion.id] !== undefined;
@@ -171,6 +189,7 @@ const OnboardingPage = () => {
     return false;
   };
 
+  // Handle moving to next question
   const handleNext = () => {
     if (currentStep < questions.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -179,19 +198,22 @@ const OnboardingPage = () => {
     }
   };
 
+  // Handle moving to previous question
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
+  // Handle answer selection
   const handleAnswer = (value: any) => {
-    setAnswers({
-      ...answers,
+    setAnswers(prev => ({
+      ...prev,
       [currentQuestion.id]: value
-    });
+    }));
   };
 
+  // Handle option selection for multi-select questions
   const handleOptionSelect = (option: string) => {
     if (isSelectQuestion(currentQuestion) && currentQuestion.type === 'multi-select') {
       const currentSelected = selectedOptions[currentQuestion.id] || [];
@@ -199,73 +221,33 @@ const OnboardingPage = () => {
         ? currentSelected.filter(item => item !== option)
         : [...currentSelected, option];
       
-      setSelectedOptions({
-        ...selectedOptions,
+      setSelectedOptions(prev => ({
+        ...prev,
         [currentQuestion.id]: newSelected
-      });
+      }));
       handleAnswer(newSelected);
     } else if (isSelectQuestion(currentQuestion)) {
       handleAnswer(option);
     }
   };
 
+  // Handle slider value change
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isSliderQuestion(currentQuestion)) {
       handleAnswer(parseInt(e.target.value));
     }
   };
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    try {
-      // Prepare the portfolio data with full information
-      const selectedPortfolioItems = selectedOptions['portfolio']?.map(id => {
-        const item = investmentOptions.find(opt => opt.id === id);
-        return item ? { id: item.id, name: item.name, logo: item.logo } : null;
-      }).filter(Boolean) || [];
-       
-
-      console.log('Submitted answers:', answers);
-      router.push('/learning');
-
-      // Prepare the profile data
-      const profileData = {
-        name: answers.name || 'Anonymous',
-        age: answers.age || 25,
-        monthlyincome: mapIncomeToNumber(answers.monthlyincome) || 50000,
-        monthlysaving: mapSavingToNumber(answers.monthlysaving) || 10000,
-        primaryreasonforinvesting: answers.primaryreasonforinvesting || 'Retirement savings',
-        financialrisk: mapRiskToText(answers.financialrisk) || 'Moderate',
-        expaboutinvesting: answers.expaboutinvesting || 'Beginner',
-        estimateinvestingduration: mapDurationToNumber(answers.estimateinvestingduration) || 10,
-        typesofinvestment: answers.typesofinvestment || ['Stocks', 'Bonds'],
-        portfolio: selectedPortfolioItems
-      };
-
-      const method = 'POST'; // Always create new profile for this onboarding
-      const response = await fetch('/v1/profile', {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profileData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save profile');
-      }
-
-      const data = await response.json();
-      console.log('Profile saved:', data);
-      router.push('/profile');
-    } catch (error) {
-      console.error('Error saving profile:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+  // Handle name input change
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+    setAnswers(prev => ({
+      ...prev,
+      name: e.target.value
+    }));
   };
 
-  // Helper functions to map UI values to API expected values
+  // Map income range to numerical value
   const mapIncomeToNumber = (incomeRange: string): number => {
     if (!incomeRange) return 50000;
     if (incomeRange.includes('₹10,000 - ₹25,000')) return 20000;
@@ -275,6 +257,7 @@ const OnboardingPage = () => {
     return 50000;
   };
 
+  // Map saving range to numerical value
   const mapSavingToNumber = (savingRange: string): number => {
     if (!savingRange) return 10000;
     if (savingRange.includes('₹5,000 - ₹15,000')) return 10000;
@@ -283,6 +266,7 @@ const OnboardingPage = () => {
     return 5000;
   };
 
+  // Map risk preference to standardized text
   const mapRiskToText = (risk: string): string => {
     if (!risk) return 'Moderate';
     if (risk.includes('avoid risk')) return 'Low';
@@ -292,6 +276,7 @@ const OnboardingPage = () => {
     return 'Moderate';
   };
 
+  // Map investment duration to years
   const mapDurationToNumber = (duration: string): number => {
     if (!duration) return 10;
     if (duration.includes('1-3')) return 2;
@@ -300,11 +285,87 @@ const OnboardingPage = () => {
     return 1;
   };
 
+  // Handle form submission
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Prepare portfolio items
+      const selectedPortfolioItems = selectedOptions['portfolio']?.map(id => {
+        const item = investmentOptions.find(opt => opt.id === id);
+        return item ? { symbol: item.symbol || item.id, name: item.name } : null;
+      }).filter(Boolean) || [];
+
+      // Prepare profile data
+      const profileData = {
+        name: answers.name || 'Anonymous',
+        age: answers.age || 25,
+        profession: answers.profession || 'Employed',
+        monthlyincome: mapIncomeToNumber(answers.monthlyincome),
+        monthlysaving: mapSavingToNumber(answers.monthlysaving),
+        primaryreasonforinvesting: answers.primaryreasonforinvesting || 'Retirement savings',
+        financialrisk: mapRiskToText(answers.financialrisk),
+        expaboutinvesting: answers.expaboutinvesting || 'Beginner',
+        estimateinvestingduration: mapDurationToNumber(answers.estimateinvestingduration),
+        typesofinvestment: answers.typesofinvestment || ['Stocks', 'Bonds'],
+        portfolio: selectedPortfolioItems,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        userId: user.uid,
+        onboardingCompleted: true
+      };
+
+      // Create a reference to the user's document
+      const userRef = doc(db, 'users', user.uid);
+      
+      // Set or update the document with the profile data
+      await setDoc(userRef, profileData, { merge: true });
+
+      // Create a reference to the user's profile subcollection
+      const profileRef = doc(collection(db, 'users', user.uid, 'profiles'), 'main');
+      
+      // Set the profile data in the subcollection
+      await setDoc(profileRef, profileData);
+
+      // Optionally call your API endpoint
+      try {
+        const response = await fetch('https://tutor-api-gdg.vercel.app/v1/profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(profileData)
+        });
+
+        // if (!response.ok) {
+        //   console.error('API Error:', await response.text());
+        //   throw new Error('Failed to save profile via API');
+        // }
+      } catch (apiError) {
+        console.error('API call failed (non-critical):', apiError);
+        // Continue even if API call fails since we've saved to Firestore
+      }
+      
+      // Redirect to profile page after successful submission
+      router.push('/profile');
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      // Here you could add a toast notification or other error feedback
+      alert('There was an error saving your profile. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Calculate progress percentage
   const progress = ((currentStep + 1) / questions.length) * 100;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
-      {/* Header remains unchanged */}
+      {/* Header section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -324,9 +385,9 @@ const OnboardingPage = () => {
         </motion.p>
       </motion.div>
 
-      {/* Main content container */}
+      {/* Main form container */}
       <div className="w-full max-w-md bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
-        {/* Progress Bar */}
+        {/* Progress bar */}
         <div className="h-2 bg-gray-200">
           <motion.div 
             className="h-full bg-gradient-to-r from-blue-500 to-purple-600"
@@ -336,6 +397,7 @@ const OnboardingPage = () => {
           />
         </div>
 
+        {/* Form content */}
         <div className="p-6">
           <AnimatePresence mode="wait">
             <motion.div
@@ -346,7 +408,7 @@ const OnboardingPage = () => {
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              {/* Question Header */}
+              {/* Question header */}
               <motion.div 
                 className="flex items-center gap-3"
                 initial={{ opacity: 0, x: -20 }}
@@ -366,14 +428,29 @@ const OnboardingPage = () => {
                 </h2>
               </motion.div>
 
-              {/* Question Content */}
+              {/* Question input */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4 }}
                 className="space-y-4"
               >
-                {isSliderQuestion(currentQuestion) && (
+                {currentQuestion.id === 'name' ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="space-y-4"
+                  >
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={handleNameChange}
+                      placeholder="Enter your name"
+                      className="w-full p-4 rounded-xl border border-gray-200 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none transition text-black placeholder:text-black/70"
+                    />
+                  </motion.div>
+                ) : isSliderQuestion(currentQuestion) ? (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -401,9 +478,7 @@ const OnboardingPage = () => {
                       <span className="text-sm text-gray-500">{currentQuestion.max}</span>
                     </motion.div>
                   </motion.div>
-                )}
-
-                {isSelectQuestion(currentQuestion) && (
+                ) : isSelectQuestion(currentQuestion) ? (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -411,7 +486,6 @@ const OnboardingPage = () => {
                     className="space-y-2"
                   >
                     {currentQuestion.id === 'portfolio' ? (
-                      // Special rendering for portfolio selection with logos
                       <div className="grid grid-cols-2 gap-3">
                         {investmentOptions.map((option) => {
                           const isSelected = selectedOptions[currentQuestion.id]?.includes(option.id);
@@ -454,7 +528,6 @@ const OnboardingPage = () => {
                         })}
                       </div>
                     ) : (
-                      // Regular select options
                       currentQuestion.options.map((option, index) => {
                         const isSelected = currentQuestion.type === 'multi-select'
                           ? selectedOptions[currentQuestion.id]?.includes(option)
@@ -492,12 +565,12 @@ const OnboardingPage = () => {
                       })
                     )}
                   </motion.div>
-                )}
+                ) : null}
               </motion.div>
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation Buttons */}
+          {/* Navigation buttons */}
           <div className="flex justify-between mt-8">
             <motion.button
               onClick={handlePrev}
@@ -538,7 +611,7 @@ const OnboardingPage = () => {
         </div>
       </div>
 
-      {/* Step Indicator */}
+      {/* Progress indicator */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

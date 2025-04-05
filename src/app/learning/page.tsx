@@ -75,26 +75,26 @@ const mockParticipants: Participant[] = [
   { id: 10, name: 'HODLer', points: 380, progress: 38, avatar: '/images/avatars/10.jpg' },
 ];
 
-const learningModules: LearningModule[] = [
-  { 
-    id: 1, 
-    title: 'Candlestick Patterns', 
-    progress: 75, 
-    content: 'Learn to read market trends through candlestick formations. Master patterns like Doji, Hammer, and Engulfing to predict price movements.' 
-  },
-  { 
-    id: 2, 
-    title: 'Risk Management', 
-    progress: 30, 
-    content: 'Master position sizing and stop-loss strategies. Learn the 1% rule and how to protect your capital during volatile markets.' 
-  },
-  { 
-    id: 3, 
-    title: 'Technical Indicators', 
-    progress: 45, 
-    content: 'Understand RSI, MACD, and Bollinger Bands to identify overbought/oversold conditions and potential reversals.' 
-  },
-];
+// const learningModules: LearningModule[] = [
+//   { 
+//     id: 1, 
+//     title: 'Candlestick Patterns', 
+//     progress: 75, 
+//     content: 'Learn to read market trends through candlestick formations. Master patterns like Doji, Hammer, and Engulfing to predict price movements.' 
+//   },
+//   { 
+//     id: 2, 
+//     title: 'Risk Management', 
+//     progress: 30, 
+//     content: 'Master position sizing and stop-loss strategies. Learn the 1% rule and how to protect your capital during volatile markets.' 
+//   },
+//   { 
+//     id: 3, 
+//     title: 'Technical Indicators', 
+//     progress: 45, 
+//     content: 'Understand RSI, MACD, and Bollinger Bands to identify overbought/oversold conditions and potential reversals.' 
+//   },
+// ];
 
 const quickLinks: QuickLink[] = [
   { 
@@ -472,9 +472,9 @@ export default function LearningPage() {
     </div>
   </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="">
           {/* Left Sidebar */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -494,11 +494,11 @@ export default function LearningPage() {
                   <FiSearch />
                 </button>
               </form>
-            </div>
+            </div> */}
 
-            <div className="space-y-4">
+            {/* <div className="space-y-4"> */}
               {/* Today's Recommendation */}
-              <motion.div 
+              {/* <motion.div 
                 whileHover={{ y: -2 }}
                 className="bg-gradient-to-r from-purple-600/30 to-transparent p-4 rounded-xl border border-purple-500/30 cursor-pointer"
                 onClick={() => handleModuleClick({
@@ -510,10 +510,10 @@ export default function LearningPage() {
               >
                 <h3 className="font-medium">{recommendedContent.title}</h3>
                 <p className="text-sm text-gray-300 mt-1">{recommendedContent.description}</p>
-              </motion.div>
+              </motion.div> */}
 
               {/* Continue Learning or Search Results */}
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 <h4 className="text-sm font-medium text-gray-400">
                   {searchResults.length > 0 ? 'Search Results' : 'Continue Learning'}
                 </h4>
@@ -551,9 +551,9 @@ export default function LearningPage() {
                     <FiX size={14} /> Clear search results
                   </button>
                 )}
-              </div>
+              </div> */}
 
-              {/* Quick Links */}
+              {/* Quick Links
               <div className="space-y-3 pt-4">
                 <h4 className="text-sm font-medium text-gray-400">Quick Links</h4>
                 {quickLinks.map(link => (
@@ -565,11 +565,11 @@ export default function LearningPage() {
                     onClick={() => handleQuickLinkClick(link)}
                   >
                     <p className="font-medium">{link.title}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
+                  </motion.div> */}
+                {/* ))}
+              </div> */}
+            {/* </div>
+          </motion.div> */}
 
           {/* Main Content Area */}
           <motion.div

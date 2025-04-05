@@ -217,7 +217,7 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
           ...prev,
           {
             sender: 'assistant',
-            content: `Evaluation: ${data.evaluation}\n\n points\n\nNext question: ${data.nextQuestion || 'Quiz completed!'}`
+            content: `Evaluation: ${data.evaluation}\n\n\nNext question: ${data.nextQuestion || 'Quiz completed!'}`
           }
         ]);
         
