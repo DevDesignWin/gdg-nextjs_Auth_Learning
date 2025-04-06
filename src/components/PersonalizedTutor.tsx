@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FiPaperclip, FiSend, FiX, FiUser } from 'react-icons/fi';
+import { FiPaperclip, FiSend, FiX } from 'react-icons/fi';
 import { useState, useRef, ChangeEvent, useEffect } from 'react';
 
 interface Message {
@@ -32,18 +32,18 @@ interface QuizState {
   }>;
 }
 
-interface UserProfile {
-  name: string;
-  age: number;
-  monthlyIncome: number;
-  monthlySaving: number;
-  primaryReasonForInvesting: string;
-  financialRisk: string;
-  expAboutInvesting: string;
-  estimateInvestingDuration: number;
-  typesOfInvestment: string[];
-  portfolio: string[];
-}
+// interface UserProfile {
+//   name: string;
+//   age: number;
+//   monthlyIncome: number;
+//   monthlySaving: number;
+//   primaryReasonForInvesting: string;
+//   financialRisk: string;
+//   expAboutInvesting: string;
+//   estimateInvestingDuration: number;
+//   typesOfInvestment: string[];
+//   portfolio: string[];
+// }
 
 interface PersonalizedTutorProps {
   onClose: () => void;
@@ -70,20 +70,20 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
     quizLevel: null,
     quizHistory: []
   });
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [showProfileForm, setShowProfileForm] = useState(false);
-  const [profileFormData, setProfileFormData] = useState({
-    name: '',
-    age: 25,
-    monthlyIncome: 0,
-    monthlySaving: 0,
-    primaryReasonForInvesting: 'Retirement savings',
-    financialRisk: 'Moderate',
-    expAboutInvesting: 'Beginner',
-    estimateInvestingDuration: 5,
-    typesOfInvestment: [] as string[],
-    portfolio: [] as string[]
-  });
+
+  // const [showProfileForm, setShowProfileForm] = useState(false);
+  // const [profileFormData, setProfileFormData] = useState({
+  //   name: '',
+  //   age: 25,
+  //   monthlyIncome: 0,
+  //   monthlySaving: 0,
+  //   primaryReasonForInvesting: 'Retirement savings',
+  //   financialRisk: 'Moderate',
+  //   expAboutInvesting: 'Beginner',
+  //   estimateInvestingDuration: 5,
+  //   typesOfInvestment: [] as string[],
+  //   portfolio: [] as string[]
+  // });
   const [showQuizLevelSelector, setShowQuizLevelSelector] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -104,8 +104,7 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setUserProfile(data.profile);
+          
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -217,7 +216,7 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
           ...prev,
           {
             sender: 'assistant',
-            content: `Evaluation: ${data.evaluation}\n\n points\n\nNext question: ${data.nextQuestion || 'Quiz completed!'}`
+            content: `Evaluation: ${data.evaluation}\n\n\nNext question: ${data.nextQuestion || 'Quiz completed!'}`
           }
         ]);
         
@@ -240,77 +239,77 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
     }
   };
 
-  const getQuizProgress = async () => {
-    if (!quizState.sessionId) return;
+  // const getQuizProgress = async () => {
+  //   if (!quizState.sessionId) return;
     
-    setIsLoading(true);
-    try {
-      const response = await fetch(`https://tutor-api-gdg.vercel.app/v1/progress/${quizState.sessionId}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
-        }
-      });
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await fetch(`https://tutor-api-gdg.vercel.app/v1/progress/${quizState.sessionId}`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Authorization': `Bearer ${authToken}`,
+  //       }
+  //     });
 
-      if (response.ok) {
-        const data = await response.json();
-        setQuizState(prev => ({
-          ...prev,
-          quizHistory: data.history
-        }));
-        setCurrentScore(data.score);
-      }
-    } catch (error) {
-      console.error('Error getting quiz progress:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setQuizState(prev => ({
+  //         ...prev,
+  //         quizHistory: data.history
+  //       }));
+  //       setCurrentScore(data.score);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error getting quiz progress:', error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const handleProfileSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      const endpoint = userProfile ? '/v1/profile' : '/v1/profile';
-      const method = userProfile ? 'PUT' : 'POST';
+  // const handleProfileSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   try {
+  //     const endpoint = userProfile ? '/v1/profile' : '/v1/profile';
+  //     const method = userProfile ? 'PUT' : 'POST';
 
-      const response = await fetch(`https://tutor-api-gdg.vercel.app${endpoint}`, {
-        method,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-          name: profileFormData.name,
-          age: profileFormData.age,
-          monthlyincome: profileFormData.monthlyIncome,
-          monthlysaving: profileFormData.monthlySaving,
-          primaryreasonforinvesting: profileFormData.primaryReasonForInvesting,
-          financialrisk: profileFormData.financialRisk,
-          expaboutinvesting: profileFormData.expAboutInvesting,
-          estimateinvestingduration: profileFormData.estimateInvestingDuration,
-          typesofinvestment: profileFormData.typesOfInvestment,
-          portfolio: profileFormData.portfolio
-        })
-      });
+  //     const response = await fetch(`https://tutor-api-gdg.vercel.app${endpoint}`, {
+  //       method,
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${authToken}`,
+  //       },
+  //       body: JSON.stringify({
+  //         name: profileFormData.name,
+  //         age: profileFormData.age,
+  //         monthlyincome: profileFormData.monthlyIncome,
+  //         monthlysaving: profileFormData.monthlySaving,
+  //         primaryreasonforinvesting: profileFormData.primaryReasonForInvesting,
+  //         financialrisk: profileFormData.financialRisk,
+  //         expaboutinvesting: profileFormData.expAboutInvesting,
+  //         estimateinvestingduration: profileFormData.estimateInvestingDuration,
+  //         typesofinvestment: profileFormData.typesOfInvestment,
+  //         portfolio: profileFormData.portfolio
+  //       })
+  //     });
 
-      if (response.ok) {
-        const data = await response.json();
-        setUserProfile(data.profile);
-        setShowProfileForm(false);
-        setMessages(prev => [...prev, {
-          sender: 'assistant',
-          content: `Profile ${userProfile ? 'updated' : 'created'} successfully! How can I help you with your investments today?`
-        }]);
-      }
-    } catch (error) {
-      console.error('Error saving profile:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setUserProfile(data.profile);
+  //       setShowProfileForm(false);
+  //       setMessages(prev => [...prev, {
+  //         sender: 'assistant',
+  //         content: `Profile ${userProfile ? 'updated' : 'created'} successfully! How can I help you with your investments today?`
+  //       }]);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error saving profile:', error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleAttachmentClick = () => {
     if (fileInputRef.current) {

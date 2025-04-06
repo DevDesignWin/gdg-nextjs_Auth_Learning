@@ -1,22 +1,37 @@
 "use client";
 
-import { useState} from "react";
-
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-import {
-  Search
-} from "lucide-react";
-
+import { Search } from "lucide-react";
 import { motion } from "framer-motion";
+
+interface Stock {
+  symbol: string;
+  name: string;
+}
+
+interface StockDataPoint {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+interface StockDataResponse {
+  symbol: string;
+  historicalData: StockDataPoint[];
+}
 
 export default function Sandbox() {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   // BSE/NSE stock options
-  const stockOptions = [
+  const stockOptions: Stock[] = [
     { symbol: "RELIANCE", name: "Reliance Industries Ltd." },
     { symbol: "TCS", name: "Tata Consultancy Services Ltd." },
     { symbol: "HDFCBANK", name: "HDFC Bank Ltd." },
@@ -36,9 +51,35 @@ export default function Sandbox() {
       stock.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleSelectStock = (stock) => {
-      router.push(`/investment-sandbox/simulation?stock=${stock}`);
-  }
+  const fetchStockData = async (stockSymbol: string): Promise<StockDataResponse> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        `https://fin-api-three.vercel.app/fakestockdata?stock=${stockSymbol}&days=365&interval=1d`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch stock data');
+      }
+      return await response.json();
+    } catch (err) {
+      console.error('Error fetching stock data:', err);
+      setError('Failed to load stock data. Please try again.');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSelectStock = async (stock: string | Stock) => {
+    try {
+      const stockSymbol = typeof stock === 'string' ? stock : stock.symbol;
+      await fetchStockData(stockSymbol); // We don't need to store the data here
+      router.push(`/investment-sandbox/simulation?stock=${stockSymbol}`);
+    } catch (err) {
+      console.error('Error selecting stock:', err);
+    }
+  };
 
   return (
     <>
@@ -83,6 +124,15 @@ export default function Sandbox() {
           </div>
         )}
       </div>
+
+      {/* Loading and Error States */}
+      {loading && (
+        <div className="p-4 text-center text-blue-500">Loading stock data...</div>
+      )}
+      {error && (
+        <div className="p-4 text-center text-red-500">{error}</div>
+      )}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -101,6 +151,7 @@ export default function Sandbox() {
               key={stock.symbol}
               onClick={() => handleSelectStock(stock.symbol)}
               className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              disabled={loading}
             >
               <div className="font-medium dark:text-white">{stock.symbol}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400 truncate">

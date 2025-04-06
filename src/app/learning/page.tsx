@@ -1,9 +1,9 @@
 'use client';
 
-import { FiActivity , FiBook, FiBookOpen } from 'react-icons/fi';
+import { FiActivity , FiBookOpen } from 'react-icons/fi';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMessageSquare, FiUser, FiAward, FiChevronRight, FiX, FiSearch, FiLogOut, FiPlus } from 'react-icons/fi';
+import { FiMessageSquare, FiUser, FiAward, FiChevronRight, FiX, FiLogOut, FiPlus } from 'react-icons/fi';
 import Image from 'next/image';
 
 import { useState, useRef, useEffect } from 'react';
@@ -22,12 +22,7 @@ interface Participant {
   avatar: string;
 }
 
-interface LearningModule {
-  id: number;
-  title: string;
-  progress: number;
-  content: string;
-}
+
 
 interface UserAccount {
   uid: string;
@@ -37,29 +32,7 @@ interface UserAccount {
   providerId: string;
 }
 
-interface LearningModule {
-  id: number;
-  title: string;
-  progress: number;
-  content: string;
-}
 
-interface QuickLink {
-  id: number;
-  title: string;
-  content: string;
-}
-
-interface Message {
-  sender: 'user' | 'assistant';
-  content: string;
-  isAttachment?: boolean;
-}
-
-interface RecommendedContent {
-  title: string;
-  description: string;
-}
 
 // Mock data
 const mockParticipants: Participant[] = [
@@ -75,61 +48,37 @@ const mockParticipants: Participant[] = [
   { id: 10, name: 'HODLer', points: 380, progress: 38, avatar: '/images/avatars/10.jpg' },
 ];
 
-const learningModules: LearningModule[] = [
-  { 
-    id: 1, 
-    title: 'Candlestick Patterns', 
-    progress: 75, 
-    content: 'Learn to read market trends through candlestick formations. Master patterns like Doji, Hammer, and Engulfing to predict price movements.' 
-  },
-  { 
-    id: 2, 
-    title: 'Risk Management', 
-    progress: 30, 
-    content: 'Master position sizing and stop-loss strategies. Learn the 1% rule and how to protect your capital during volatile markets.' 
-  },
-  { 
-    id: 3, 
-    title: 'Technical Indicators', 
-    progress: 45, 
-    content: 'Understand RSI, MACD, and Bollinger Bands to identify overbought/oversold conditions and potential reversals.' 
-  },
-];
+// const learningModules: LearningModule[] = [
+//   { 
+//     id: 1, 
+//     title: 'Candlestick Patterns', 
+//     progress: 75, 
+//     content: 'Learn to read market trends through candlestick formations. Master patterns like Doji, Hammer, and Engulfing to predict price movements.' 
+//   },
+//   { 
+//     id: 2, 
+//     title: 'Risk Management', 
+//     progress: 30, 
+//     content: 'Master position sizing and stop-loss strategies. Learn the 1% rule and how to protect your capital during volatile markets.' 
+//   },
+//   { 
+//     id: 3, 
+//     title: 'Technical Indicators', 
+//     progress: 45, 
+//     content: 'Understand RSI, MACD, and Bollinger Bands to identify overbought/oversold conditions and potential reversals.' 
+//   },
+// ];
 
-const quickLinks: QuickLink[] = [
-  { 
-    id: 1, 
-    title: 'Market Glossary', 
-    content: 'Comprehensive dictionary of trading terms and concepts from ATR to Volume Weighted Average Price.' 
-  },
-  { 
-    id: 2, 
-    title: 'Trading Calculators', 
-    content: 'Essential tools for position sizing, risk assessment, and profit/loss calculations.' 
-  },
-  { 
-    id: 3, 
-    title: 'Economic Calendar', 
-    content: 'Upcoming market-moving events and economic indicators that can impact your trades.' 
-  },
-];
-
-const recommendedContent: RecommendedContent = {
-  title: 'Technical Analysis Fundamentals',
-  description: 'Master the basics of reading price charts and identifying key support/resistance levels.'
-};
 
 export default function LearningPage() {
-  const [selectedLink, setSelectedLink] = useState<QuickLink | null>(null);
-  const [searchResults, setSearchResults] = useState<LearningModule[]>([]);
+
   const router = useRouter();
   const { user, logout, signInWithGoogle, linkWithGoogle } = useAuth();
   const [activeChat, setActiveChat] = useState<string | null>(null);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedModule, setSelectedModule] = useState<LearningModule | null>(null);
   const [userAccounts, setUserAccounts] = useState<UserAccount[]>([]);
+  const selectedModule = null;
   const [authToken, setAuthToken] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -152,14 +101,6 @@ export default function LearningPage() {
     getToken();
   }, [user]);
 
- // Handle opening tutor with auth check
- const handleOpenTutor = () => {
-  if (!user) {
-    alert('Please sign in to use the tutor');
-    return;
-  }
-  setActiveChat('tutor');
-};
 
   // Fetch user accounts on mount
   useEffect(() => {
@@ -207,52 +148,6 @@ export default function LearningPage() {
     setShowAccountMenu(false);
   };
 
-  // Handle search
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      const results = [
-        {
-          id: 100,
-          title: `${searchQuery} Basics`,
-          progress: 0,
-          content: `Fundamental concepts and principles of ${searchQuery} in trading.`
-        },
-        {
-          id: 101,
-          title: `Advanced ${searchQuery} Strategies`,
-          progress: 0,
-          content: `Professional techniques and advanced applications of ${searchQuery}.`
-        },
-        {
-          id: 102,
-          title: `Common ${searchQuery} Mistakes`,
-          progress: 0,
-          content: `Typical errors traders make with ${searchQuery} and how to avoid them.`
-        }
-      ];
-      setSearchResults(results);
-      setSearchQuery('');
-    }
-  };
-
-  // Handle module click with auth check
-  const handleModuleClick = (module: LearningModule) => {
-    if (!user) {
-      alert('Please sign in to use the tutor');
-      return;
-    }
-    setSelectedModule(module);
-    setActiveChat('tutor');
-    setSearchResults([]);
-  };
-
-  // Handle quick link click
-  const handleQuickLinkClick = (link: QuickLink) => {
-    setSelectedLink(link);
-    setActiveChat(null);
-    alert(`Opening: ${link.title}\n\n${link.content}`);
-  };
 
 
   return (
@@ -472,9 +367,9 @@ export default function LearningPage() {
     </div>
   </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="">
           {/* Left Sidebar */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -494,11 +389,11 @@ export default function LearningPage() {
                   <FiSearch />
                 </button>
               </form>
-            </div>
+            </div> */}
 
-            <div className="space-y-4">
+            {/* <div className="space-y-4"> */}
               {/* Today's Recommendation */}
-              <motion.div 
+              {/* <motion.div 
                 whileHover={{ y: -2 }}
                 className="bg-gradient-to-r from-purple-600/30 to-transparent p-4 rounded-xl border border-purple-500/30 cursor-pointer"
                 onClick={() => handleModuleClick({
@@ -510,10 +405,10 @@ export default function LearningPage() {
               >
                 <h3 className="font-medium">{recommendedContent.title}</h3>
                 <p className="text-sm text-gray-300 mt-1">{recommendedContent.description}</p>
-              </motion.div>
+              </motion.div> */}
 
               {/* Continue Learning or Search Results */}
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 <h4 className="text-sm font-medium text-gray-400">
                   {searchResults.length > 0 ? 'Search Results' : 'Continue Learning'}
                 </h4>
@@ -551,9 +446,9 @@ export default function LearningPage() {
                     <FiX size={14} /> Clear search results
                   </button>
                 )}
-              </div>
+              </div> */}
 
-              {/* Quick Links */}
+              {/* Quick Links
               <div className="space-y-3 pt-4">
                 <h4 className="text-sm font-medium text-gray-400">Quick Links</h4>
                 {quickLinks.map(link => (
@@ -565,11 +460,11 @@ export default function LearningPage() {
                     onClick={() => handleQuickLinkClick(link)}
                   >
                     <p className="font-medium">{link.title}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
+                  </motion.div> */}
+                {/* ))}
+              </div> */}
+            {/* </div>
+          </motion.div> */}
 
           {/* Main Content Area */}
           <motion.div
