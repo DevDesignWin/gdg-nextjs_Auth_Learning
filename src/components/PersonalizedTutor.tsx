@@ -32,18 +32,18 @@ interface QuizState {
   }>;
 }
 
-interface UserProfile {
-  name: string;
-  age: number;
-  monthlyIncome: number;
-  monthlySaving: number;
-  primaryReasonForInvesting: string;
-  financialRisk: string;
-  expAboutInvesting: string;
-  estimateInvestingDuration: number;
-  typesOfInvestment: string[];
-  portfolio: string[];
-}
+// interface UserProfile {
+//   name: string;
+//   age: number;
+//   monthlyIncome: number;
+//   monthlySaving: number;
+//   primaryReasonForInvesting: string;
+//   financialRisk: string;
+//   expAboutInvesting: string;
+//   estimateInvestingDuration: number;
+//   typesOfInvestment: string[];
+//   portfolio: string[];
+// }
 
 interface PersonalizedTutorProps {
   onClose: () => void;
@@ -70,7 +70,7 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
     quizLevel: null,
     quizHistory: []
   });
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
   // const [showProfileForm, setShowProfileForm] = useState(false);
   // const [profileFormData, setProfileFormData] = useState({
   //   name: '',
@@ -104,8 +104,7 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setUserProfile(data.profile);
+          
         }
       } catch (error) {
         console.error('Error loading profile:', error);

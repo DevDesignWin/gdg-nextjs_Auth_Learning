@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/investment-sandbox/simulation/page.js", "src/app/investment-sandbox/simulation/sandbox.js"],
   "exclude": ["node_modules"]
 }

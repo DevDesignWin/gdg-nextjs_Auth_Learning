@@ -78,7 +78,7 @@ export default function LearningPage() {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [userAccounts, setUserAccounts] = useState<UserAccount[]>([]);
-  const [selectedModule, setSelectedModule] = useState(null);
+  const selectedModule = null;
   const [authToken, setAuthToken] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronDown, FiChevronUp, FiPlay, FiBookOpen, FiCheckCircle, FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Lecture {
   id: string;
@@ -10,7 +11,7 @@ interface Lecture {
   duration: string;
   type: 'video' | 'article';
   completed: boolean;
-  videoThumbnail?: string;
+  videoThumbnail?: string ;
   videoUrl?: string;
   articleContent?: string;
 }
@@ -515,7 +516,7 @@ const CoursePage = () => {
                                       whileHover={{ scale: 1.05 }}
                                       className="w-12 h-8 rounded overflow-hidden border border-gray-600"
                                     >
-                                      <img src={lecture.videoThumbnail} alt="Thumbnail" className="w-full h-full object-cover" />
+                                      <Image src={lecture.videoThumbnail} alt="Thumbnail" className="w-full h-full object-cover" />
                                     </motion.div>
                                   )}
                                 </div>

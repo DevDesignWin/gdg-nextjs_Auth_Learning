@@ -127,7 +127,10 @@ const ProfilePage = () => {
   }, [user]);
 
   // Handle input changes
-  const handleInputChange = (field: keyof ProfileData, value: any) => {
+  const handleInputChange = <K extends keyof ProfileData>(
+    field: K,
+    value: ProfileData[K]
+  ) => {
     setEditableProfile(prev => ({
       ...prev,
       [field]: value

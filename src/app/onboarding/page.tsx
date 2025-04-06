@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation';
 import { FiArrowRight, FiArrowLeft, FiCheck, FiDollarSign, FiBriefcase, FiAward, FiPieChart, FiTrendingUp, FiBarChart2, FiCalendar, FiHome, FiDatabase, FiUser } from 'react-icons/fi';
 import Image from 'next/image';
 import { db } from '@/lib/firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '@/context/AuthContext';
 
 type QuestionType = 'slider' | 'single-select' | 'multi-select';
+type AnswerValue = string | number | string[];
 
 interface BaseQuestion {
   id: string;
@@ -58,7 +59,7 @@ const OnboardingPage = () => {
   const router = useRouter();
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [name, setName] = useState('');
@@ -161,12 +162,10 @@ const OnboardingPage = () => {
     }
   ];
 
-  // Check if question is a slider question
   const isSliderQuestion = (question: Question): question is SliderQuestion => {
     return question.type === 'slider';
   };
 
-  // Check if question is a select question
   const isSelectQuestion = (question: Question): question is SelectQuestion => {
     return question.type === 'single-select' || question.type === 'multi-select';
   };
@@ -174,7 +173,6 @@ const OnboardingPage = () => {
   const currentQuestion = questions[currentStep];
   const isOptional = currentQuestion.optional;
   
-  // Check if current question has an answer
   const hasAnswer = () => {
     if (isSliderQuestion(currentQuestion)) {
       return answers[currentQuestion.id] !== undefined;
@@ -188,7 +186,6 @@ const OnboardingPage = () => {
     return false;
   };
 
-  // Handle moving to next question
   const handleNext = () => {
     if (currentStep < questions.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -197,22 +194,19 @@ const OnboardingPage = () => {
     }
   };
 
-  // Handle moving to previous question
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  // Handle answer selection
-  const handleAnswer = (value: any) => {
+  const handleAnswer = (value: AnswerValue) => {
     setAnswers(prev => ({
       ...prev,
       [currentQuestion.id]: value
     }));
   };
 
-  // Handle option selection for multi-select questions
   const handleOptionSelect = (option: string) => {
     if (isSelectQuestion(currentQuestion) && currentQuestion.type === 'multi-select') {
       const currentSelected = selectedOptions[currentQuestion.id] || [];
@@ -230,14 +224,12 @@ const OnboardingPage = () => {
     }
   };
 
-  // Handle slider value change
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isSliderQuestion(currentQuestion)) {
       handleAnswer(parseInt(e.target.value));
     }
   };
 
-  // Handle name input change
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
     setAnswers(prev => ({
@@ -246,45 +238,6 @@ const OnboardingPage = () => {
     }));
   };
 
-  // Map income range to numerical value
-  const mapIncomeToNumber = (incomeRange: string): number => {
-    if (!incomeRange) return 50000;
-    if (incomeRange.includes('₹10,000 - ₹25,000')) return 20000;
-    if (incomeRange.includes('₹25,000 - ₹50,000')) return 37500;
-    if (incomeRange.includes('₹50,000 - ₹1,00,000')) return 75000;
-    if (incomeRange.includes('₹1,00,000')) return 150000;
-    return 50000;
-  };
-
-  // Map saving range to numerical value
-  const mapSavingToNumber = (savingRange: string): number => {
-    if (!savingRange) return 10000;
-    if (savingRange.includes('₹5,000 - ₹15,000')) return 10000;
-    if (savingRange.includes('₹15,000 - ₹50,000')) return 32500;
-    if (savingRange.includes('₹50,000+')) return 60000;
-    return 5000;
-  };
-
-  // Map risk preference to standardized text
-  const mapRiskToText = (risk: string): string => {
-    if (!risk) return 'Moderate';
-    if (risk.includes('avoid risk')) return 'Low';
-    if (risk.includes('little risk')) return 'Moderately Low';
-    if (risk.includes('moderate risk')) return 'Moderate';
-    if (risk.includes('high risks')) return 'High';
-    return 'Moderate';
-  };
-
-  // Map investment duration to years
-  const mapDurationToNumber = (duration: string): number => {
-    if (!duration) return 10;
-    if (duration.includes('1-3')) return 2;
-    if (duration.includes('3-7')) return 5;
-    if (duration.includes('7+')) return 10;
-    return 1;
-  };
-
-  // Handle form submission
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
@@ -292,23 +245,21 @@ const OnboardingPage = () => {
         throw new Error('User not authenticated');
       }
 
-      // Prepare portfolio items
       const selectedPortfolioItems = selectedOptions['portfolio']?.map(id => {
         const item = investmentOptions.find(opt => opt.id === id);
         return item ? { symbol: item.symbol || item.id, name: item.name } : null;
       }).filter(Boolean) || [];
 
-      // Prepare profile data
       const profileData = {
         name: answers.name || 'Anonymous',
         age: answers.age || 25,
         profession: answers.profession || 'Employed',
-        monthlyincome: mapIncomeToNumber(answers.monthlyincome),
-        monthlysaving: mapSavingToNumber(answers.monthlysaving),
+        monthlyincome: answers.monthlyincome || '₹25,000 - ₹50,000',
+        monthlysaving: answers.monthlysaving || '₹5,000 - ₹15,000',
         primaryreasonforinvesting: answers.primaryreasonforinvesting || 'Retirement savings',
-        financialrisk: mapRiskToText(answers.financialrisk),
-        expaboutinvesting: answers.expaboutinvesting || 'Beginner',
-        estimateinvestingduration: mapDurationToNumber(answers.estimateinvestingduration),
+        financialrisk: answers.financialrisk || 'I can handle moderate risk',
+        expaboutinvesting: answers.expaboutinvesting || 'I know some basics',
+        estimateinvestingduration: answers.estimateinvestingduration || '3-7 years',
         typesofinvestment: answers.typesofinvestment || ['Stocks', 'Bonds'],
         portfolio: selectedPortfolioItems,
         createdAt: new Date().toISOString(),
@@ -317,54 +268,22 @@ const OnboardingPage = () => {
         onboardingCompleted: true
       };
 
-      // Create a reference to the user's document
       const userRef = doc(db, 'users', user.uid);
-      
-      // Set or update the document with the profile data
       await setDoc(userRef, profileData, { merge: true });
 
-      // Create a reference to the user's profile subcollection
-      const profileRef = doc(collection(db, 'users', user.uid, 'profiles'), 'main');
-      
-      // Set the profile data in the subcollection
-      await setDoc(profileRef, profileData);
-
-      // Optionally call your API endpoint
-      try {
-        const response = await fetch('https://tutor-api-gdg.vercel.app/v1/profile', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(profileData)
-        });
-
-        // if (!response.ok) {
-        //   console.error('API Error:', await response.text());
-        //   throw new Error('Failed to save profile via API');
-        // }
-      } catch (apiError) {
-        console.error('API call failed (non-critical):', apiError);
-        // Continue even if API call fails since we've saved to Firestore
-      }
-      
-      // Redirect to profile page after successful submission
       router.push('/profile');
     } catch (error) {
       console.error('Error saving profile:', error);
-      // Here you could add a toast notification or other error feedback
       alert('There was an error saving your profile. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Calculate progress percentage
   const progress = ((currentStep + 1) / questions.length) * 100;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
-      {/* Header section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -384,9 +303,7 @@ const OnboardingPage = () => {
         </motion.p>
       </motion.div>
 
-      {/* Main form container */}
       <div className="w-full max-w-md bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
-        {/* Progress bar */}
         <div className="h-2 bg-gray-200">
           <motion.div 
             className="h-full bg-gradient-to-r from-blue-500 to-purple-600"
@@ -396,7 +313,6 @@ const OnboardingPage = () => {
           />
         </div>
 
-        {/* Form content */}
         <div className="p-6">
           <AnimatePresence mode="wait">
             <motion.div
@@ -407,7 +323,6 @@ const OnboardingPage = () => {
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              {/* Question header */}
               <motion.div 
                 className="flex items-center gap-3"
                 initial={{ opacity: 0, x: -20 }}
@@ -427,7 +342,6 @@ const OnboardingPage = () => {
                 </h2>
               </motion.div>
 
-              {/* Question input */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -569,7 +483,6 @@ const OnboardingPage = () => {
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation buttons */}
           <div className="flex justify-between mt-8">
             <motion.button
               onClick={handlePrev}
@@ -610,7 +523,6 @@ const OnboardingPage = () => {
         </div>
       </div>
 
-      {/* Progress indicator */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
