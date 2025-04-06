@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { FiPaperclip, FiSend, FiX } from 'react-icons/fi';
 import { useState, useRef, ChangeEvent, useEffect } from 'react';
+import Image from 'next/image';
 
 interface Message {
   sender: 'user' | 'assistant';
@@ -32,18 +33,18 @@ interface QuizState {
   }>;
 }
 
-interface UserProfile {
-  name: string;
-  age: number;
-  monthlyIncome: number;
-  monthlySaving: number;
-  primaryReasonForInvesting: string;
-  financialRisk: string;
-  expAboutInvesting: string;
-  estimateInvestingDuration: number;
-  typesOfInvestment: string[];
-  portfolio: string[];
-}
+// interface UserProfile {
+//   name: string;
+//   age: number;
+//   monthlyIncome: number;
+//   monthlySaving: number;
+//   primaryReasonForInvesting: string;
+//   financialRisk: string;
+//   expAboutInvesting: string;
+//   estimateInvestingDuration: number;
+//   typesOfInvestment: string[];
+//   portfolio: string[];
+// }
 
 
 interface GeneralChatProps {
@@ -71,7 +72,6 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
     quizLevel: null,
     quizHistory: []
   });
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   // const [showProfileForm, setShowProfileForm] = useState(false);
   // const [profileFormData, setProfileFormData] = useState({
   //   name: '',
@@ -105,8 +105,6 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setUserProfile(data.profile);
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -518,7 +516,7 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
                   className="bg-gradient-to-r from-blue-600/70 to-blue-800/70 rounded-2xl rounded-br-none p-2 max-w-xs md:max-w-md"
                 >
                   <div className="relative w-full h-48">
-                    <img
+                    <Image
                       src={message.attachmentUrl || ''}
                       alt="Uploaded chart"
                       className="object-contain rounded-lg w-full h-full"

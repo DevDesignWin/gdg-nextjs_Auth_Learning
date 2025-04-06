@@ -63,9 +63,9 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Authentication timeout')), 30000);
-      });
+      // const timeoutPromise = new Promise((_, reject) => {
+      //   setTimeout(() => reject(new Error('Authentication timeout')), 30000);
+      // });
   
       // Race between auth and timeout
       // const result = await Promise.race([
@@ -74,7 +74,7 @@ export default function LoginPage() {
       // ]);
       setShouldRedirect(true);
     } catch (err) {
-      if (err instanceof Error && err.message === 'Authentication timeout') {
+      if (err instanceof Error ) {
         setError('Sign-in took too long. Please try again.');
       } else {
         handleAuthError(err);

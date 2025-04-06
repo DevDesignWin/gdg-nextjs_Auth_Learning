@@ -27,13 +27,13 @@ export default function Home() {
     },
     {
       name: "Debojit Roy",
-      role: "Frontend Developer",
+      role: "Developer",
       image: "/images/debojit.png",
      
     },
     {
       name: "Anurag Jyoti",
-      role: "Frontend Developer",
+      role: "Developer",
       image: "/images/anurag.jpg",
      
     }
@@ -621,7 +621,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="font-bold text-white mb-1">Assessment Quizzes</p>
-                  <p className="text-sm">Validates learning against <span className="text-green-300">academic research</span> on education's role</p>
+                  <p className="text-sm">Validates learning against <span className="text-green-300">academic research</span> on education&apos;s role</p>
                 </div>
               </div>
               
@@ -693,7 +693,7 @@ export default function Home() {
       <section className="bg-black/30 p-6 rounded-xl border border-gray-700 backdrop-blur-sm">
         <h2 className="text-2xl font-bold text-center mb-6 text-white">Strategic Conclusion</h2>
         <div className="max-w-3xl mx-auto text-center">
-          <p className="mb-4 text-lg">Your trading simulator <span className="font-bold text-yellow-300">directly addresses India's financial literacy challenges</span> through an innovative, multi-modal approach combining:</p>
+          <p className="mb-4 text-lg">Your trading simulator <span className="font-bold text-yellow-300">directly addresses India&apos;s financial literacy challenges</span> through an innovative, multi-modal approach combining:</p>
           
           <div className="grid grid-cols-4 gap-2 mb-6">
             <span className="bg-blue-900/50 text-blue-100 px-2 py-1 rounded-full text-sm">Education</span>

@@ -5,7 +5,6 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { FiHome, FiTrendingUp, FiUser, FiMoon, FiSun } from 'react-icons/fi';
 import { useTheme } from 'next-themes';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export function NavBar() {
   const { user } = useAuth();
@@ -45,12 +44,9 @@ export function NavBar() {
             {user ? (
               <Button variant="ghost" asChild>
                 <Link href="/profile" className="flex items-center gap-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.photoURL || undefined} />
-                    <AvatarFallback>
+
                       <FiUser />
-                    </AvatarFallback>
-                  </Avatar>
+
                   <span className="hidden md:inline">Profile</span>
                 </Link>
               </Button>
