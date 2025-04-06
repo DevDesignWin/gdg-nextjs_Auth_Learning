@@ -27,13 +27,13 @@ export default function Home() {
     },
     {
       name: "Debojit Roy",
-      role: "Developer",
+      role: "Fullstack Developer",
       image: "/images/debojit.png",
      
     },
     {
       name: "Anurag Jyoti",
-      role: "Developer",
+      role: "Fullstack Developer",
       image: "/images/anurag.jpg",
      
     }
@@ -539,7 +539,7 @@ export default function Home() {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-yellow-300 mr-3" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
           </svg>
-          <h2 className="text-2xl font-bold text-white">Innovation Value of Your Trading Simulator</h2>
+          <h2 className="text-2xl font-bold text-white">Innovation Value of Trading Simulator</h2>
         </div>
         
         <div className="grid md:grid-cols-2 gap-8">
@@ -693,7 +693,7 @@ export default function Home() {
       <section className="bg-black/30 p-6 rounded-xl border border-gray-700 backdrop-blur-sm">
         <h2 className="text-2xl font-bold text-center mb-6 text-white">Strategic Conclusion</h2>
         <div className="max-w-3xl mx-auto text-center">
-          <p className="mb-4 text-lg">Your trading simulator <span className="font-bold text-yellow-300">directly addresses India&apos;s financial literacy challenges</span> through an innovative, multi-modal approach combining:</p>
+          <p className="mb-4 text-lg">Trading simulator <span className="font-bold text-yellow-300">directly addresses India&apos;s financial literacy challenges</span> through an innovative, multi-modal approach combining:</p>
           
           <div className="grid grid-cols-4 gap-2 mb-6">
             <span className="bg-blue-900/50 text-blue-100 px-2 py-1 rounded-full text-sm">Education</span>
