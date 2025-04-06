@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { FiPaperclip, FiSend, FiX } from 'react-icons/fi';
 import { useState, useRef, ChangeEvent, useEffect } from 'react';
+import Image from 'next/image';
 
 interface Message {
   sender: 'user' | 'assistant';
@@ -515,7 +516,7 @@ export default function PersonalizedTutor({ onClose, selectedModule, authToken }
                   className="bg-gradient-to-r from-blue-600/70 to-blue-800/70 rounded-2xl rounded-br-none p-2 max-w-xs md:max-w-md"
                 >
                   <div className="relative w-full h-48">
-                    <img
+                    <Image
                       src={message.attachmentUrl || ''}
                       alt="Uploaded chart"
                       className="object-contain rounded-lg w-full h-full"

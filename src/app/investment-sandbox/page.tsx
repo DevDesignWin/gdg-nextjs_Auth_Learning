@@ -127,7 +127,7 @@ export default function Sandbox() {
 
       {/* Loading and Error States */}
       {loading && (
-        <div className="p-4 text-center text-blue-500">Loading stock data...</div>
+        <div className="p-4 text-center text-blue-500 animate-pulse">Loading stock data...</div>
       )}
       {error && (
         <div className="p-4 text-center text-red-500">{error}</div>

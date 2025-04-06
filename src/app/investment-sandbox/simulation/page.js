@@ -1,5 +1,6 @@
 "use client"
 
+import {Suspense} from "react"
 import Link from "next/link"
 import SandboxComponent from "./sandbox"
 import { useState, useEffect, useRef } from "react"
@@ -36,7 +37,7 @@ const getMonthKey = (dateStr) => {
   return `${date.getFullYear()}-${date.getMonth() + 1}`
 }
 
-export default function InvestmentSimulator() {
+const Simulation = () => {
   const searchParams = useSearchParams()
   const stockSymbol = searchParams.get("stock") || "INFY"
 
@@ -119,7 +120,7 @@ export default function InvestmentSimulator() {
         setMonthlyGroups(groups)
 
         // Set visible index to first day
-        setVisibleDataIndex(Math.min(visibleDataIndex, processedData.length - 1))
+        setVisibleDataIndex((prev) => Math.min(prev, processedData.length - 1))
 
         // Don't reset portfolio and transactions when changing stocks
         // setPortfolio({})
@@ -161,7 +162,7 @@ export default function InvestmentSimulator() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [playing, stockData, simulationSpeed])
+  }, [playing, stockData, simulationSpeed, visibleDataIndex])
 
   // Filter news articles based on current simulation date
   useEffect(() => {
@@ -218,7 +219,7 @@ export default function InvestmentSimulator() {
         [stockSymbol]: currentPrice,
       }))
     }
-  }, [currentPrice, stockSymbol])
+  }, [currentPrice, stockSymbol, currentDayData])
 
   // Calculate portfolio value
   const portfolioShares = portfolio[stockSymbol] || 0
@@ -787,7 +788,14 @@ export default function InvestmentSimulator() {
           </p>
         </div>
       </footer>
-    </div>
+    </div>)
+}
+
+export default function InvestmentSimulator() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Simulation />
+    </Suspense>
   )
 }
 

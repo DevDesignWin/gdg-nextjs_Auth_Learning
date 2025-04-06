@@ -516,7 +516,7 @@ const CoursePage = () => {
                                       whileHover={{ scale: 1.05 }}
                                       className="w-12 h-8 rounded overflow-hidden border border-gray-600"
                                     >
-                                      <Image src={lecture.videoThumbnail} alt="Thumbnail" className="w-full h-full object-cover" />
+                                      <Image src={lecture.videoThumbnail || '/images/fallback_thumbnail.jpg'} alt="Thumbnail" className="w-full h-full object-cover" />
                                     </motion.div>
                                   )}
                                 </div>

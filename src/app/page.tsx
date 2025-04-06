@@ -27,13 +27,13 @@ export default function Home() {
     },
     {
       name: "Debojit Roy",
-      role: "Frontend Developer",
+      role: "Developer",
       image: "/images/debojit.png",
      
     },
     {
       name: "Anurag Jyoti",
-      role: "Frontend Developer",
+      role: "Developer",
       image: "/images/anurag.jpg",
      
     }
